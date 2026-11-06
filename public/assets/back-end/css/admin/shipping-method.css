@@ -1,0 +1,54 @@
+.category-cost-bulk {
+    width: auto;
+    max-width: 320px;
+}
+
+.category-cost-bulk .form-control {
+    max-width: 110px;
+}
+
+.category-cost-search {
+    flex-grow: 1;
+    max-width: 280px;
+    min-width: 200px;
+}
+
+.category-cost-scroll {
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.category-cost-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bs-body-bg, #fff);
+}
+
+.category-cost-table td,
+.category-cost-table th {
+    padding-block: .5rem;
+}
+
+.category-cost-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 320px;
+}
+
+.category-cost-input {
+    max-width: 180px;
+}
+
+.category-cost-actions {
+    position: sticky;
+    bottom: 0;
+    background: var(--bs-body-bg, #fff);
+}
+
+.category-cost-table td:first-child,
+.category-cost-table th:first-child {
+    width: 56px;
+}

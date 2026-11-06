@@ -1,0 +1,45 @@
+.support-ticket-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.support-ticket-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+#support-ticket-cards .card-body {
+    padding: 1rem;
+}
+
+.ticket-thread {
+    flex-grow: 1;
+    min-height: 140px;
+}
+
+.ticket-side-column {
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 991px) {
+    .ticket-side-column {
+        overflow-y: visible;
+    }
+
+    .ticket-thread {
+        max-height: 55vh;
+    }
+}
+
+.ticket-avatar-slot {
+    width: 25px;
+}
+
+.ticket-thread-card .chat-composer-attachments .image-array {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ticket-thread-card .chat-composer .upload_img_box {
+    margin-inline-start: 0;
+}

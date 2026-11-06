@@ -1,0 +1,255 @@
+.module-switcher {
+    position: relative;
+    display: inline-block;
+}
+
+.module-switcher__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    block-size: 38px;
+    min-inline-size: 138px;
+    padding-inline: 14px;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: var(--hd-ink, #14181f);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.18s ease;
+}
+
+.module-switcher__toggle:hover,
+.module-switcher__toggle:focus {
+    background-color: var(--hd-tint, #f4f7fb);
+    color: var(--hd-ink, #14181f);
+    text-decoration: none;
+}
+
+.module-switcher__toggle:active {
+    background-color: #eef2f8;
+}
+
+.module-switcher__toggle:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.module-switcher__toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.module-switcher__toggle-icon img {
+    display: block;
+    inline-size: 20px;
+    block-size: 20px;
+    object-fit: contain;
+}
+
+.module-switcher__toggle-label {
+    display: block;
+}
+
+.module-switcher__toggle-label,
+.module-switcher__title,
+.module-switcher__subtitle,
+.module-switcher__label,
+.module-switcher__desc,
+.module-switcher__note {
+    text-transform: none;
+}
+
+.module-switcher__toggle-caret {
+    display: block;
+    margin-inline-start: auto;
+    font-size: 11px;
+    line-height: 1;
+    opacity: 0.65;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.module-switcher__toggle:hover .module-switcher__toggle-caret {
+    opacity: 1;
+}
+
+.module-switcher > .module-switcher__panel {
+    inset-block-start: 100%;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inline-size: 25rem;
+    min-inline-size: 0;
+    max-inline-size: min(25rem, calc(100vw - 2rem));
+    max-block-size: calc(100vh - 8rem);
+    margin-block-start: 0;
+    padding: 20px;
+}
+
+.module-switcher__head {
+    display: block;
+    margin-block-end: 16px;
+    text-align: center;
+}
+
+.module-switcher__title {
+    display: block;
+    color: var(--hm-ink, #14181f);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.module-switcher__subtitle {
+    display: block;
+    margin-block-start: 6px;
+    color: var(--hm-muted, #7a8699);
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+.module-switcher__list {
+    display: grid;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 12px;
+    background-color: #f5f7fa;
+}
+
+.module-switcher__panel a.module-switcher__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--hm-ink, #14181f);
+    text-decoration: none;
+    transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.module-switcher__panel a.module-switcher__option:hover,
+.module-switcher__panel a.module-switcher__option:focus-visible {
+    border-color: var(--hm-line, #e7ecf3);
+    background-color: #ffffff;
+    color: var(--hm-ink, #14181f);
+    text-decoration: none;
+}
+
+.module-switcher__panel a.module-switcher__option.is-active {
+    border-color: var(--hm-line, #e7ecf3);
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgba(16, 20, 28, 0.06);
+}
+
+.module-switcher__icon {
+    flex-shrink: 0;
+    inline-size: 24px;
+    block-size: 24px;
+    margin-block-start: 2px;
+    object-fit: contain;
+}
+
+.module-switcher__body {
+    display: block;
+    min-inline-size: 0;
+}
+
+.module-switcher__label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.module-switcher__desc {
+    display: block;
+    margin-block-start: 2px;
+    color: var(--hm-muted, #7a8699);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.module-switcher__note {
+    display: block;
+    margin-block-start: 16px;
+    color: var(--hm-muted, #7a8699);
+    font-size: 12.5px;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.module-switcher__note-key {
+    color: var(--web-primary, #0d6efd);
+    font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .module-switcher:not(.module-switcher--stacked):hover > .module-switcher__panel,
+    .module-switcher:not(.module-switcher--stacked):focus-within > .module-switcher__panel {
+        display: block;
+    }
+
+    .module-switcher:not(.module-switcher--stacked):hover > .module-switcher__toggle .module-switcher__toggle-caret,
+    .module-switcher:not(.module-switcher--stacked):focus-within > .module-switcher__toggle .module-switcher__toggle-caret {
+        transform: rotate(180deg);
+        opacity: 1;
+    }
+}
+
+.module-switcher--stacked {
+    display: block;
+}
+
+.module-switcher--stacked > .module-switcher__toggle {
+    display: flex;
+    inline-size: 100%;
+    justify-content: flex-start;
+}
+
+.module-switcher--stacked > .module-switcher__toggle .module-switcher__toggle-caret {
+    margin-inline-start: auto;
+}
+
+.module-switcher--stacked > .module-switcher__panel,
+#navbarCollapse .module-switcher--stacked > .module-switcher__panel {
+    position: static;
+    float: none;
+    inline-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
+    padding: 16px !important;
+    border: 1px solid var(--hm-line, #e7ecf3) !important;
+    border-radius: 12px !important;
+    background-color: #ffffff;
+    box-shadow: none;
+}
+
+#navbarCollapse .module-switcher--stacked .module-switcher__title {
+    font-size: 16px;
+}
+
+#navbarCollapse .module-switcher--stacked .module-switcher__subtitle {
+    font-size: 13px;
+}
+
+#navbarCollapse .module-switcher--stacked .module-switcher__label {
+    font-size: 14px;
+}
+
+#navbarCollapse .module-switcher--stacked .module-switcher__desc,
+#navbarCollapse .module-switcher--stacked .module-switcher__note {
+    font-size: 12.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .module-switcher__toggle,
+    .module-switcher__toggle-caret,
+    .module-switcher__panel a.module-switcher__option {
+        transition: none;
+    }
+}

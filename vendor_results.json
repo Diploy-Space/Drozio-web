@@ -1,0 +1,139 @@
+{
+  "total": 19,
+  "pass": 17,
+  "results": [
+    {
+      "req": "NotificationModalViewRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"id\",\"message\":\"The id field is required.\"}]}"
+    },
+    {
+      "req": "EmergencyContactRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"name\",\"message\":\"Name is required\"},{\"error_code\":\"cou"
+    },
+    {
+      "req": "ShopRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"name\",\"message\":\"The name field is required.\"},{\"error"
+    },
+    {
+      "req": "ShopVacationRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"vacation_duration_type\",\"message\":\"The vacation durati"
+    },
+    {
+      "req": "DeliveryManWalletRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"amount\",\"message\":\"The amount field is required.\"}]}"
+    },
+    {
+      "req": "DeliveryManUpdateRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"f_name\",\"message\":\"The first name field is required\"},"
+    },
+    {
+      "req": "DeliveryManRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"f_name\",\"message\":\"The first name field is required\"},"
+    },
+    {
+      "req": "CouponUpdateRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"coupon_type\",\"message\":\"The coupon type field is requi"
+    },
+    {
+      "req": "CouponRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"business_module\",\"message\":\"Business module is require"
+    },
+    {
+      "req": "ShippingMethodRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"title\",\"message\":\"The title field is required\"},{\"erro"
+    },
+    {
+      "req": "PaymentInfoRequest",
+      "s": 500,
+      "errArr": false,
+      "errObj": false,
+      "sm": "{\n    \"message\": \"Trying to access array offset on null\",\n    \"exception\": \"Erro"
+    },
+    {
+      "req": "WithdrawRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"withdraw_method\",\"message\":\"The withdraw method field "
+    },
+    {
+      "req": "RefundStatusRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"id\",\"message\":\"The id field is required.\"},{\"error_cod"
+    },
+    {
+      "req": "ShippingTypeRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"shippingType\",\"message\":\"The shipping type field is re"
+    },
+    {
+      "req": "CustomerRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"f_name\",\"message\":\"First name is required\"},{\"error_co"
+    },
+    {
+      "req": "VendorBankInfoRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"bank_name\",\"message\":\"The bank name field is required."
+    },
+    {
+      "req": "VendorRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"f_name\",\"message\":\"First name is required!\"},{\"error_c"
+    },
+    {
+      "req": "VendorPasswordRequest",
+      "s": 422,
+      "errArr": true,
+      "errObj": false,
+      "sm": "{\"errors\":[{\"error_code\":\"password\",\"message\":\"The password field is required\"},"
+    },
+    {
+      "req": "ClearanceSaleSEOSetupRequest",
+      "s": 200,
+      "errArr": false,
+      "errObj": false,
+      "sm": "<!DOCTYPE html>\n<html lang=\"en\" dir=\"ltr\">\n\n<head>\n    <meta charset=\"utf-8\">\n  "
+    }
+  ]
+}

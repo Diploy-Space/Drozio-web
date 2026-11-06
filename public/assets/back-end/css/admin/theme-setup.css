@@ -1,0 +1,24 @@
+/* ── Status tiles ── */
+#theme-status-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.theme-status-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.theme-status-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+#theme-status-cards h3 {
+    font-size: 1.05rem;
+}
+
+.badge-soft-secondary {
+    background: rgba(0, 0, 0, .06);
+    color: var(--bs-secondary-color, #6b7280);
+}

@@ -1,0 +1,246 @@
+/*
+ * Storefront icon subset — generated, do not hand-edit.
+ *
+ * The storefront uses 158 glyphs out of the four admin icon sets it used to load
+ * in full: 1148 KB of font became 15.1 KB.
+ *
+ * Regenerate after adding an icon to a storefront template:
+ *   pip install fonttools brotli && python build-icon-subset.py
+ *
+ * Sources: assets/backend/webfonts/uicons-{regular,solid}-rounded.css, uicons-brands.css,
+ *          assets/back-end/vendor/icon-set/style.css
+ */
+@font-face {
+    font-family: "uicons-regular-rounded";
+    src: url("uicons-regular-rounded.storefront.woff2") format("woff2");
+    font-display: swap;
+}
+i[class^="fi-rr-"]:before, i[class*=" fi-rr-"]:before, span[class^="fi-rr-"]:before, span[class*="fi-rr-"]:before {
+font-family: uicons-regular-rounded !important;
+font-style: normal;
+font-weight: normal !important;
+font-variant: normal;
+text-transform: none;
+line-height: 1;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.fi-rr-angle-double-left:before { content: "\e073"; }
+.fi-rr-angle-down:before { content: "\e079"; }
+.fi-rr-angle-left:before { content: "\e07a"; }
+.fi-rr-angle-right:before { content: "\e07b"; }
+.fi-rr-angle-small-left:before { content: "\e07d"; }
+.fi-rr-angle-small-right:before { content: "\e07e"; }
+.fi-rr-angle-small-up:before { content: "\e07f"; }
+.fi-rr-apps:before { content: "\e098"; }
+.fi-rr-arrow-right:before { content: "\e0cc"; }
+.fi-rr-arrow-up-left:before { content: "\e0e6"; }
+.fi-rr-auction:before { content: "\e119"; }
+.fi-rr-badge-percent:before { content: "\e138"; }
+.fi-rr-bars-filter:before { content: "\e165"; }
+.fi-rr-bell:before { content: "\e187"; }
+.fi-rr-bell-ring:before { content: "\e18b"; }
+.fi-rr-blog-text:before { content: "\e1c1"; }
+.fi-rr-bolt:before { content: "\e1ce"; }
+.fi-rr-bookmark:before { content: "\e1f1"; }
+.fi-rr-box-open:before { content: "\e21c"; }
+.fi-rr-boxes:before { content: "\e220"; }
+.fi-rr-briefcase:before { content: "\e25c"; }
+.fi-rr-building:before { content: "\e27c"; }
+.fi-rr-call-outgoing:before { content: "\e2c2"; }
+.fi-rr-camera:before { content: "\e2c4"; }
+.fi-rr-chart-histogram:before { content: "\e33d"; }
+.fi-rr-check:before { content: "\e35f"; }
+.fi-rr-check-circle:before { content: "\e360"; }
+.fi-rr-circle-user:before { content: "\e3c9"; }
+.fi-rr-clock:before { content: "\e3ea"; }
+.fi-rr-comment:before { content: "\e454"; }
+.fi-rr-comment-question:before { content: "\e46f"; }
+.fi-rr-copy:before { content: "\e49e"; }
+.fi-rr-cross:before { content: "\e4cd"; }
+.fi-rr-cross-small:before { content: "\e4d0"; }
+.fi-rr-down-to-line:before { content: "\e5a2"; }
+.fi-rr-download:before { content: "\e5a3"; }
+.fi-rr-envelope:before { content: "\e5fe"; }
+.fi-rr-exchange:before { content: "\e61b"; }
+.fi-rr-eye:before { content: "\e62c"; }
+.fi-rr-file-download:before { content: "\e6a4"; }
+.fi-rr-gavel:before { content: "\e776"; }
+.fi-rr-headset:before { content: "\e83b"; }
+.fi-rr-heart:before { content: "\e83c"; }
+.fi-rr-info:before { content: "\e8ce"; }
+.fi-rr-list:before { content: "\e9b1"; }
+.fi-rr-list-check:before { content: "\e9b2"; }
+.fi-rr-location-arrow:before { content: "\e9bf"; }
+.fi-rr-marker:before { content: "\ea01"; }
+.fi-rr-medal:before { content: "\ea1b"; }
+.fi-rr-menu-burger:before { content: "\ea33"; }
+.fi-rr-menu-dots-vertical:before { content: "\ea35"; }
+.fi-rr-minus:before { content: "\ea63"; }
+.fi-rr-pencil:before { content: "\eb87"; }
+.fi-rr-phone-call:before { content: "\ebde"; }
+.fi-rr-plus:before { content: "\ec37"; }
+.fi-rr-plus-small:before { content: "\ec3a"; }
+.fi-rr-refresh:before { content: "\ece4"; }
+.fi-rr-search:before { content: "\ed83"; }
+.fi-rr-share:before { content: "\eda7"; }
+.fi-rr-shipping-fast:before { content: "\edc2"; }
+.fi-rr-shop:before { content: "\edca"; }
+.fi-rr-shopping-bag:before { content: "\edce"; }
+.fi-rr-sign-in-alt:before { content: "\ede8"; }
+.fi-rr-sign-out-alt:before { content: "\ede9"; }
+.fi-rr-square-plus:before { content: "\eebc"; }
+.fi-rr-star:before { content: "\eed9"; }
+.fi-rr-tags:before { content: "\ef62"; }
+.fi-rr-ticket:before { content: "\efb9"; }
+.fi-rr-time-fast:before { content: "\efc4"; }
+.fi-rr-time-oclock:before { content: "\efc9"; }
+.fi-rr-trash:before { content: "\f026"; }
+.fi-rr-truck-side:before { content: "\f065"; }
+.fi-rr-user:before { content: "\f0a7"; }
+.fi-rr-user-add:before { content: "\f0a8"; }
+.fi-rr-users:before { content: "\f0df"; }
+.fi-rr-wallet:before { content: "\f12a"; }
+@font-face {
+    font-family: "uicons-solid-rounded";
+    src: url("uicons-solid-rounded.storefront.woff2") format("woff2");
+    font-display: swap;
+}
+i[class^="fi-sr-"]:before, i[class*=" fi-sr-"]:before, span[class^="fi-sr-"]:before, span[class*="fi-sr-"]:before {
+font-family: uicons-solid-rounded !important;
+font-style: normal;
+font-weight: normal !important;
+font-variant: normal;
+text-transform: none;
+line-height: 1;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.fi-sr-add:before { content: "\e026"; }
+.fi-sr-angle-double-left:before { content: "\e073"; }
+.fi-sr-angle-down:before { content: "\e079"; }
+.fi-sr-angle-left:before { content: "\e07a"; }
+.fi-sr-angle-right:before { content: "\e07b"; }
+.fi-sr-apps:before { content: "\e098"; }
+.fi-sr-arrow-small-down:before { content: "\e0cf"; }
+.fi-sr-arrow-small-right:before { content: "\e0d1"; }
+.fi-sr-arrow-small-up:before { content: "\e0d2"; }
+.fi-sr-auction:before { content: "\e119"; }
+.fi-sr-ban:before { content: "\e150"; }
+.fi-sr-bars-filter:before { content: "\e165"; }
+.fi-sr-basket-shopping-minus:before { content: "\e16c"; }
+.fi-sr-bell:before { content: "\e187"; }
+.fi-sr-bell-notification-social-media:before { content: "\e18a"; }
+.fi-sr-bookmark:before { content: "\e1f1"; }
+.fi-sr-calendar:before { content: "\e2a1"; }
+.fi-sr-check:before { content: "\e35f"; }
+.fi-sr-check-circle:before { content: "\e360"; }
+.fi-sr-circle-user:before { content: "\e3c9"; }
+.fi-sr-clock:before { content: "\e3ea"; }
+.fi-sr-clone:before { content: "\e405"; }
+.fi-sr-code-compare:before { content: "\e43c"; }
+.fi-sr-comment:before { content: "\e454"; }
+.fi-sr-comment-alt:before { content: "\e455"; }
+.fi-sr-comment-minus:before { content: "\e46c"; }
+.fi-sr-compass-alt:before { content: "\e47b"; }
+.fi-sr-cross:before { content: "\e4cd"; }
+.fi-sr-down-to-line:before { content: "\e5a2"; }
+.fi-sr-eye:before { content: "\e62c"; }
+.fi-sr-file-invoice:before { content: "\e6ad"; }
+.fi-sr-heart:before { content: "\e83c"; }
+.fi-sr-info:before { content: "\e8ce"; }
+.fi-sr-land-layer-location:before { content: "\e949"; }
+.fi-sr-lock:before { content: "\e9c5"; }
+.fi-sr-menu-burger:before { content: "\ea33"; }
+.fi-sr-menu-dots-vertical:before { content: "\ea35"; }
+.fi-sr-paper-plane:before { content: "\eb50"; }
+.fi-sr-pen-circle:before { content: "\eb7c"; }
+.fi-sr-phone-call:before { content: "\ebde"; }
+.fi-sr-play:before { content: "\ec28"; }
+.fi-sr-rotate-right:before { content: "\ed2a"; }
+.fi-sr-share:before { content: "\eda7"; }
+.fi-sr-shopping-cart:before { content: "\edd1"; }
+.fi-sr-shopping-cart-add:before { content: "\edd2"; }
+.fi-sr-sign-in-alt:before { content: "\ede8"; }
+.fi-sr-star:before { content: "\eed9"; }
+.fi-sr-trash:before { content: "\f026"; }
+.fi-sr-usd-circle:before { content: "\f0a4"; }
+.fi-sr-wifi-1:before { content: "\f15d"; }
+@font-face {
+    font-family: "uicons-brands";
+    src: url("uicons-brands.storefront.woff2") format("woff2");
+    font-display: swap;
+}
+i[class^="fi-brands-"]:before, i[class*=" fi-brands-"]:before, span[class^="fi-brands-"]:before, span[class*="fi-brands-"]:before {
+font-family: uicons-brands !important;
+font-style: normal;
+font-weight: normal !important;
+font-variant: normal;
+text-transform: none;
+line-height: 1;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.fi-brands-facebook:before { content: "\e80c"; }
+.fi-brands-linkedin:before { content: "\ec27"; }
+.fi-brands-twitter-alt:before { content: "\f4c4"; }
+.fi-brands-whatsapp:before { content: "\f5f5"; }
+@font-face {
+    font-family: "The-Icon-of";
+    src: url("the-icon.storefront.woff2") format("woff2");
+    font-display: block;
+}
+[class^="tio-"],
+[class*=" tio-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: "The-Icon-of" !important;
+    font-size: 1.125em;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Enable Ligatures ================ */
+    letter-spacing: 0;
+    -webkit-font-feature-settings: "liga";
+    -moz-font-feature-settings: "liga=1";
+    -moz-font-feature-settings: "liga";
+    -ms-font-feature-settings: "liga" 1;
+    font-feature-settings: "liga";
+    -webkit-font-variant-ligatures: discretionary-ligatures;
+    font-variant-ligatures: discretionary-ligatures;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.tio-add:before { content: "\e904"; }
+.tio-add-circle:before { content: "\e901"; }
+.tio-back-ui:before { content: "\e9ac"; }
+.tio-bookmarks:before { content: "\e90d"; }
+.tio-briefcase:before { content: "\ebf9"; }
+.tio-chevron-left:before { content: "\e9b2"; }
+.tio-chevron-right:before { content: "\e9b3"; }
+.tio-clear:before { content: "\e920"; }
+.tio-delete-outlined:before { content: "\ed21"; }
+.tio-download-to:before { content: "\ed24"; }
+.tio-flash:before { content: "\eb71"; }
+.tio-hidden:before { content: "\ed33"; }
+.tio-info:before { content: "\e939"; }
+.tio-info-outined:before { content: "\e938"; }
+.tio-invisible:before { content: "\ed3b"; }
+.tio-link:before { content: "\ece0"; }
+.tio-more-vertical:before { content: "\ed4a"; }
+.tio-next-ui:before { content: "\e9ba"; }
+.tio-photo-camera:before { content: "\ea74"; }
+.tio-photo-square-outlined:before { content: "\ebb3"; }
+.tio-play:before { content: "\e9ce"; }
+.tio-refresh:before { content: "\e94e"; }
+.tio-remove:before { content: "\e954"; }
+.tio-search:before { content: "\e956"; }
+.tio-star:before { content: "\e967"; }
+.tio-star-half:before { content: "\e965"; }
+.tio-upload:before { content: "\ed5c"; }
+.tio-user:before { content: "\ed6b"; }

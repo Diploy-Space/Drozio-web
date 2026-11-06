@@ -1,0 +1,95 @@
+.language-metric-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.language-metric-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+#language-metric-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+#language-metric-cards .card-body {
+    padding: .85rem 1rem;
+}
+
+#language-metric-cards h3 {
+    font-size: 1.05rem;
+}
+
+.min-w-0 {
+    min-width: 0;
+}
+
+/* Flag avatar in the list */
+.lang-flag {
+    width: 26px;
+    height: 20px;
+    border-radius: 4px;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .08);
+    flex-shrink: 0;
+}
+
+/* Per-language translation completion bar */
+.language-setup-table .lang-progress .progress {
+    height: 6px;
+    min-width: 90px;
+    background: rgba(0, 0, 0, .06);
+}
+
+.language-setup-table .lang-progress .min-w-40 {
+    min-width: 40px;
+}
+
+.language-setup-table .min-w-160 {
+    min-width: 160px;
+}
+
+.badge-soft-secondary {
+    background: rgba(0, 0, 0, .06);
+    color: var(--bs-secondary-color, #6b7280);
+}
+
+/* Search box in the list header */
+.language-search {
+    min-width: 260px;
+}
+
+/* Add-language slide-in panel */
+#addLanguageOffcanvas {
+    width: 420px;
+    max-width: 92vw;
+}
+
+#addLanguageOffcanvas .offcanvas-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mobile: full-width search + add button, metric cards already stack via grid */
+@media (max-width: 767.98px) {
+    .language-list-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .language-list-actions > form,
+    .language-search {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .language-list-actions .btn {
+        justify-content: center;
+    }
+
+    .language-setup-table {
+        min-width: 720px;
+    }
+}

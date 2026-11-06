@@ -1,0 +1,125 @@
+.translation-metric-card {
+    border: 1px solid transparent;
+}
+
+/* Search box wide enough for the full placeholder; full width on small screens */
+.translation-search {
+    min-width: 300px;
+    max-width: 360px;
+}
+
+#translation-stat-cards .stat-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+}
+
+/* Clickable stat cards act as status filters */
+.translation-filter-card {
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+.translation-filter-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .08);
+}
+
+.translation-filter-card.active {
+    border-color: var(--bs-primary);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .08);
+}
+
+/* Edited row highlight */
+.translation-content-table tr.row-edited td {
+    background: rgba(var(--bs-warning-rgb, 255, 193, 7), .08);
+}
+
+.translation-content-table tr.row-edited td:first-child {
+    box-shadow: inset 3px 0 0 0 var(--bs-warning, #ffc107);
+}
+
+/* Auto-grow value box */
+.translation-content-table textarea.translation-value {
+    resize: none;
+    overflow: hidden;
+    min-height: 42px;
+    line-height: 1.4;
+}
+
+.max-h-300px {
+    max-height: 300px;
+}
+
+#unused-keys-list .unused-key-item {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    word-break: break-all;
+}
+
+#unused-keys-list .unused-key-item:nth-child(odd) {
+    background: rgba(0, 0, 0, .03);
+}
+
+.translation-content-table {
+    width: 100%;
+}
+
+.translation-content-table th,
+.translation-content-table td {
+    white-space: normal;
+    vertical-align: middle;
+}
+
+/* SL sizes to its content (no fixed width) and never wraps */
+.translation-content-table th:first-child,
+.translation-content-table td:first-child {
+    width: 1%;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Long underscore-joined keys wrap instead of widening the table */
+.translation-content-table td.translation-key-cell {
+    max-width: 360px;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+
+/* Keep the editable value column comfortably wide */
+.translation-content-table td:nth-child(3),
+.translation-content-table th:nth-child(3) {
+    min-width: 240px;
+}
+
+/* Mobile: full-width search + buttons, and a horizontally scrollable table that stays readable */
+@media (max-width: 767.98px) {
+    .translation-search {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .translation-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .translation-actions > form {
+        width: 100%;
+    }
+
+    .translation-action-buttons {
+        width: 100%;
+    }
+
+    .translation-action-buttons .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .translation-content-table {
+        min-width: 680px;
+    }
+}

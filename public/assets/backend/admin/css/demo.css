@@ -1,0 +1,100 @@
+.__announcement-bar {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    will-change: transform;
+    transition: transform .3s ease;
+}
+
+body.demo {
+    transition: padding-top .3s ease;
+}
+
+body.page-scrolled .__announcement-bar {
+    transform: translateY(-100%);
+}
+
+.__announcement-bar .wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-block: 5px;
+    min-height: 50px;
+    column-gap: 10px;
+    row-gap: 10px;
+    font-weight: 600;
+}
+
+.__announcement-bar .wrapper .click {
+    color: #fff !important;
+    font-weight: 700;
+}
+
+
+body:not(.page-scrolled).demo:has(.__announcement-bar) {
+    padding-top: 50px;
+}
+
+.demo aside.aside,
+.demo .navbar-fixed {
+    transition: .3s ease-in all;
+}
+
+body:not(.page-scrolled).demo aside.aside,
+body:not(.page-scrolled).demo .navbar-fixed {
+    top: 50px;
+}
+
+@media screen and (max-width: 486px) {
+    body:not(.page-scrolled).demo aside.aside,
+    body:not(.page-scrolled).demo .navbar-fixed {
+        top: 90px;
+    }
+    body:not(.page-scrolled).demo:has(.__announcement-bar) {
+        padding-top: 90px;
+    }
+}
+
+a[href^="mailto:"],
+a[href^="tel:"] {
+    pointer-events: none;
+}
+a[href^="mailto:"]::after,
+a[href^="tel:"]::after {
+    content: '';
+    display: none;
+}
+
+body.v2-active.demo { padding-top: 0 !important; }
+body.demo .app-v2 {
+  --v2-demo-bar-h: 50px;
+  transition: height .3s ease, margin-top .3s ease;
+}
+body.demo:has(.__announcement-bar):not(.page-scrolled) .app-v2 {
+  height: calc(100vh - var(--v2-demo-bar-h));
+  height: calc(100dvh - var(--v2-demo-bar-h));
+  margin-top: var(--v2-demo-bar-h);
+}
+body.demo.page-scrolled .app-v2 { height: 100vh; height: 100dvh; margin-top: 0; }
+
+@media (max-width: 486px) {
+  body.demo .app-v2 { --v2-demo-bar-h: 90px; }
+}
+
+body.demo:has(.__announcement-bar) #page-progress-bar {
+    top: 50px;
+}
+
+@media (max-width: 486px) {
+    body.demo:has(.__announcement-bar) #page-progress-bar {
+        top: 96px;
+    }
+}

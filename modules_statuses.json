@@ -1,0 +1,11 @@
+{
+    "Blog": true,
+    "Gateways": true,
+    "TaxModule": true,
+    "AI": true,
+    "Auction": true,
+    "Builder": true,
+    "Courier": true,
+    "Wholesale": true,
+    "ApiPlayground": true
+}

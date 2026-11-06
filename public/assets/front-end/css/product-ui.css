@@ -1,0 +1,775 @@
+/* Shared product-surface primitives — used by the product details page and the quick view modal. */
+
+:root {
+    --pd-surface: #f6f8fb;
+    --pd-line: #e7ecf3;
+    --pd-ink: #14181f;
+    --pd-muted: #7a8699;
+    --pd-in-stock: #1a9d5a;
+    --pd-low-stock: #d98307;
+    --pd-out-stock: #d64545;
+}
+
+/* Gallery */
+
+.pd-stage {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid var(--pd-line);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.pd-stage .swiper-slide img {
+    border-radius: 12px !important;
+}
+
+.pd-badges {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-start: 10px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.pd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.pd-badge--discount {
+    background-color: var(--web-primary, #0d6efd);
+    color: #ffffff;
+}
+
+.pd-badge--type {
+    background-color: rgba(255, 255, 255, 0.94);
+    color: var(--pd-ink);
+    box-shadow: 0 1px 3px rgba(20, 24, 31, 0.12);
+}
+
+.pd-badge--type img {
+    inline-size: 13px;
+    block-size: 13px;
+}
+
+.pd-icon-btn {
+    inline-size: 34px;
+    block-size: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--pd-line);
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: var(--pd-muted);
+    font-size: 14px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.pd-icon-btn:hover,
+.pd-icon-btn:focus-visible {
+    color: var(--web-primary, #0d6efd);
+    border-color: var(--web-primary, #0d6efd);
+}
+
+.pd-thumbs {
+    margin-block-start: 12px;
+}
+
+.pd-thumbs .swiper-slide {
+    background-color: #ffffff;
+    border: 1px solid var(--pd-line);
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0.75;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.pd-thumbs .swiper-slide:hover {
+    opacity: 1;
+}
+
+.pd-thumbs .swiper-slide-thumb-active {
+    opacity: 1;
+    border-color: var(--web-primary, #0d6efd) !important;
+}
+
+/* Store attribution */
+
+.pd-shop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    inline-size: max-content;
+    max-inline-size: 100%;
+    color: var(--pd-muted);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.pd-shop:hover {
+    color: var(--web-primary, #0d6efd);
+}
+
+.pd-shop__avatar {
+    inline-size: 26px;
+    block-size: 26px;
+    flex-shrink: 0;
+    border: 1px solid var(--pd-line);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.pd-shop__name {
+    font-weight: 600;
+    color: var(--pd-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pd-shop:hover .pd-shop__name {
+    color: inherit;
+}
+
+/* Title + meta */
+
+.pd-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--pd-ink);
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+a.pd-title:hover {
+    color: var(--web-primary, #0d6efd);
+}
+
+.pd-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    color: var(--pd-muted);
+    font-size: 13px;
+}
+
+.pd-meta__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pd-meta__item strong {
+    color: var(--pd-ink);
+    font-weight: 600;
+}
+
+.pd-meta__item a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.pd-meta__item a:hover {
+    color: var(--web-primary, #0d6efd);
+}
+
+.pd-meta__sep {
+    inline-size: 1px;
+    block-size: 12px;
+    background-color: var(--pd-line);
+}
+
+.pd-meta .star-rating {
+    line-height: 1;
+}
+
+/* Price */
+
+.pd-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0;
+}
+
+.pd-price .discounted-unit-price {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    line-height: 1.2;
+    color: var(--pd-ink) !important;
+}
+
+.pd-price .product-total-unit-price {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    color: var(--pd-muted) !important;
+}
+
+.pd-price .product-total-unit-price:empty {
+    display: none;
+}
+
+.pd-divider {
+    block-size: 1px;
+    margin: 0;
+    background-color: var(--pd-line);
+    border: 0;
+    opacity: 1;
+}
+
+.pd-summary {
+    margin: 0;
+    color: var(--pd-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Variant option rows */
+
+.pd-option {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+}
+
+.pd-option__label {
+    min-inline-size: 74px;
+    margin: 0;
+    color: var(--pd-muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.pd-option ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Quantity stepper */
+
+.pd-qty-box {
+    inline-size: 124px;
+    block-size: 40px;
+    border: 1px solid var(--pd-line);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pd-qty-box .btn-number {
+    inline-size: 36px;
+    block-size: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--pd-ink);
+    font-size: 18px;
+    line-height: 1;
+    transition: background-color 0.2s ease;
+}
+
+.pd-qty-box .btn-number:hover:not(:disabled) {
+    background-color: var(--pd-surface);
+    color: var(--web-primary, #0d6efd);
+}
+
+.pd-qty-box .btn-number:disabled {
+    color: #c3ccda;
+}
+
+.pd-qty-box .input-number {
+    block-size: 100%;
+    padding: 0;
+    background-color: transparent;
+    font-weight: 600;
+    color: var(--pd-ink);
+    box-shadow: none;
+}
+
+/* Stock indicator */
+
+.pd-stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.pd-stock::before {
+    content: "";
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.pd-stock--in {
+    color: var(--pd-in-stock);
+}
+
+.pd-stock--low {
+    color: var(--pd-low-stock);
+}
+
+.pd-stock--out {
+    color: var(--pd-out-stock);
+}
+
+/* Chosen total */
+
+.pd-total {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background-color: var(--pd-surface);
+}
+
+.pd-total__label {
+    color: var(--pd-muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.pd-total .product-details-chosen-price-amount {
+    color: var(--pd-ink);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Buy actions */
+
+.pd-actions {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.pd-actions .btn {
+    block-size: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.pd-actions .btn:not(.pd-wishlist) {
+    flex: 1 1 0;
+    min-inline-size: 0;
+}
+
+.pd-wishlist {
+    position: relative;
+    flex: 0 0 auto;
+    gap: 6px;
+    padding-inline: 14px;
+    border: 1px solid var(--pd-line);
+    background-color: #ffffff;
+    color: var(--pd-muted);
+    font-size: 16px;
+}
+
+.pd-wishlist:hover {
+    border-color: var(--web-primary, #0d6efd);
+}
+
+.pd-wishlist span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Fact strip */
+
+.pd-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    color: var(--pd-muted);
+    font-size: 12.5px;
+}
+
+.pd-facts__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pd-facts__item strong {
+    color: var(--pd-ink);
+    font-weight: 600;
+}
+
+.pd-details-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--web-primary, #0d6efd);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.pd-details-link:hover {
+    color: var(--web-primary, #0d6efd);
+    text-decoration: underline;
+}
+
+.pd-details-link i {
+    font-size: 11px;
+}
+
+[dir="rtl"] .pd-details-link i {
+    transform: scaleX(-1);
+}
+
+@media (max-width: 575px) {
+    .pd-price .discounted-unit-price {
+        font-size: 24px !important;
+    }
+
+    .pd-actions {
+        flex-wrap: wrap;
+    }
+
+    .pd-actions .btn:not(.pd-wishlist) {
+        flex: 1 1 140px;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+   Product details page layout. Scoped to .pd-page so nothing leaks elsewhere.
+   --------------------------------------------------------------------------- */
+
+.pd-page .pd-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-block-end: 12px;
+    color: var(--pd-muted);
+    font-size: 13px;
+}
+
+.pd-page .pd-breadcrumb a {
+    color: var(--pd-muted);
+    text-decoration: none;
+}
+
+.pd-page .pd-breadcrumb a:hover {
+    color: var(--web-primary, #0d6efd);
+}
+
+.pd-page .pd-breadcrumb__current {
+    max-inline-size: 340px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--pd-ink);
+    font-weight: 500;
+}
+
+.pd-page .pd-breadcrumb i {
+    font-size: 9px;
+    opacity: 0.6;
+}
+
+[dir="rtl"] .pd-page .pd-breadcrumb i {
+    transform: scaleX(-1);
+}
+
+.pd-page .pd-title {
+    margin: 0;
+    font-size: 24px;
+}
+
+.pd-page .pd-buy-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pd-page .pd-buy-column > form {
+    gap: 16px !important;
+}
+
+.pd-page .pd-stage-actions {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-end: 10px;
+    z-index: 4;
+    min-inline-size: 0;
+    min-block-size: 0;
+}
+
+/* Tabs */
+
+.pd-page .pd-tabs {
+    display: flex;
+    gap: 4px;
+    margin-block-end: 20px;
+    padding: 0;
+    border-block-end: 1px solid var(--pd-line);
+    list-style: none;
+}
+
+.pd-page .pd-tabs .nav-link {
+    position: relative;
+    margin: 0;
+    padding: 10px 4px 14px;
+    margin-inline-end: 24px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--pd-muted) !important;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.pd-page .pd-tabs .nav-link:hover {
+    color: var(--pd-ink) !important;
+}
+
+.pd-page .pd-tabs .nav-link.active {
+    color: var(--web-primary, #0d6efd) !important;
+    background: none;
+}
+
+/* The theme already draws the active-tab bar via .nav-tabs .nav-link::before (inset, and red).
+   Re-point that one rather than layering a second indicator over it. */
+.pd-page .pd-tabs .nav-link::before {
+    inset-block-end: -1px;
+    inset-inline: 0;
+    inline-size: 100%;
+    border-radius: 2px 2px 0 0;
+}
+
+.pd-page .pd-tabs .nav-link.active::before {
+    background-color: var(--web-primary, #0d6efd);
+}
+
+/* Rich-text description — merchant HTML arrives with arbitrary inline sizing,
+   so the container has to re-impose a readable scale. */
+
+.pd-page .p-details-description {
+    inline-size: 100%;
+    color: #4a5261;
+    font-size: 14.5px !important;
+    line-height: 1.75;
+}
+
+.pd-page .p-details-description :is(p, span, div, li) {
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+
+.pd-page .p-details-description :is(h1, h2, h3, h4, h5, h6) {
+    margin-block: 20px 8px;
+    color: var(--pd-ink);
+    font-size: 16px !important;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.pd-page .p-details-description :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-block-start: 0;
+}
+
+.pd-page .p-details-description p {
+    margin-block-end: 10px;
+}
+
+.pd-page .p-details-description :is(ul, ol) {
+    margin-block-end: 12px;
+    padding-inline-start: 20px;
+}
+
+.pd-page .p-details-description li {
+    margin-block-end: 4px;
+}
+
+.pd-page .p-details-description img {
+    border-radius: 8px;
+}
+
+.pd-page .details-content-wrap {
+    position: relative;
+}
+
+.pd-page .see-more-details {
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Sidebar */
+
+.pd-page .product-details-shipping-details {
+    border: 1px solid var(--pd-line);
+    border-radius: 12px;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.pd-page .product-details-shipping-details .shipping-details-bottom-border:last-child {
+    border-block-end: 0;
+}
+
+.pd-page .pd-sidebar-card {
+    margin-block-start: 16px;
+    padding: 16px;
+    border: 1px solid var(--pd-line);
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.pd-page .pd-sidebar-heading {
+    margin: 24px 0 12px;
+    color: var(--pd-ink);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+@media (max-width: 991px) {
+    .pd-page .pd-title {
+        font-size: 20px;
+    }
+
+    .pd-page .pd-breadcrumb__current {
+        max-inline-size: 180px;
+    }
+}
+
+.pd-page .__inline-31 {
+    margin-block-start: 16px;
+    padding: 20px;
+    border: 1px solid var(--pd-line);
+    border-radius: 12px;
+}
+
+.pd-page .product-details-shipping-details span {
+    color: #4a5261;
+    font-size: 13.5px;
+}
+
+.pd-page .shipping-details-bottom-border .px-3 {
+    padding-block: 12px !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Notices — store availability and other inline product-surface messages.
+   --------------------------------------------------------------------------- */
+
+.pd-alert {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid;
+    border-radius: 10px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    overflow: hidden;
+}
+
+.pd-alert::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: 3px;
+    background-color: currentColor;
+}
+
+.pd-alert__icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 20px;
+    block-size: 20px;
+    margin-block-start: 1px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.pd-alert__icon i {
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1;
+}
+
+.pd-alert__body {
+    min-inline-size: 0;
+    color: #4a5261;
+}
+
+.pd-alert__title {
+    display: block;
+    margin-block-end: 2px;
+    color: var(--pd-ink);
+    font-weight: 600;
+}
+
+.pd-alert--warning {
+    border-color: #f6dfae;
+    background-color: #fdf6e7;
+    color: #b9791a;
+}
+
+.pd-alert--danger {
+    border-color: #f3cccc;
+    background-color: #fdf1f1;
+    color: var(--pd-out-stock);
+}
+
+.pd-alert--info {
+    border-color: #cfe0f6;
+    background-color: #eff5fd;
+    color: var(--web-primary, #0d6efd);
+}
+
+/* Compact variant for the sticky buy bar, where the notice sits inline beside the price. */
+.pd-alert--inline {
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.pd-alert--inline .pd-alert__icon {
+    inline-size: 18px;
+    block-size: 18px;
+    margin-block-start: 0;
+}

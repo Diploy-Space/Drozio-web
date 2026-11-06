@@ -1,0 +1,2 @@
+200
+{"status":true,"reply":"You have reached your usage limit for the shopping assistant","intent":"blocked","products":[],"actions":[]}

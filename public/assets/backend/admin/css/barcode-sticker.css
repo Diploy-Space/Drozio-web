@@ -1,0 +1,89 @@
+@page {
+    size: 1.55in 0.85in;
+    margin: 0;
+}
+
+.barcode-a4 {
+    width: 1.55in;
+    height: 0.85in;
+    border: 0;
+    margin: 0 0 0.05in 0;
+    padding: 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    page-break-after: always;
+    break-after: page;
+}
+
+.barcode-a4:last-child {
+    page-break-after: auto;
+    break-after: auto;
+}
+
+.barcode-a4 .style-compact {
+    width: 1.55in;
+    height: 0.85in;
+    float: none;
+    margin: 0;
+    padding: 4px;
+}
+
+.show-div {
+    visibility: visible !important;
+    display: block !important;
+}
+
+.show-div2 {
+    display: none !important;
+}
+
+@media print {
+    html,
+    body {
+        width: 1.55in !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+
+    body:has(#print-area) :not(:has(#print-area)):not(#print-area):not(#print-area *) {
+        display: none !important;
+    }
+
+    :has(#print-area) {
+        display: block !important;
+        position: static !important;
+        float: none !important;
+        transform: none !important;
+        width: 1.55in !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    #print-area {
+        width: 1.55in;
+        padding: 0 !important;
+    }
+
+    .barcode-a4 {
+        margin: 0;
+    }
+
+    .barcode-a4 .item {
+        border: 0;
+    }
+}

@@ -1,0 +1,169 @@
+.maintenance-page {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    padding: 2rem 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(var(--web-primary-rgb, 20, 85, 172), .08), transparent 42%),
+        radial-gradient(circle at 88% 82%, rgba(var(--web-primary-rgb, 20, 85, 172), .06), transparent 45%),
+        #f6f7fb;
+}
+
+.maintenance-page > .container {
+    margin: auto;
+}
+
+.maintenance-card {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(18, 27, 56, .08);
+    text-align: center;
+}
+
+.maintenance-illustration {
+    display: block;
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.maintenance-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: .35rem .9rem;
+    border-radius: 999px;
+    background: rgba(var(--web-primary-rgb, 20, 85, 172), .1);
+    color: var(--web-primary, #1455ac);
+    font-size: .8125rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+}
+
+.maintenance-card h2.title {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+    color: #1b2337;
+    overflow-wrap: anywhere;
+}
+
+.maintenance-card p.info {
+    margin: 0;
+    font-size: .9375rem;
+    line-height: 1.6rem;
+    color: #5c6478;
+    overflow-wrap: anywhere;
+}
+
+.maintenance-return {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: .65rem 1.15rem;
+    border: 1px dashed rgba(18, 27, 56, .18);
+    border-radius: 14px;
+    font-size: .875rem;
+    line-height: 1.5rem;
+    color: #5c6478;
+}
+
+.maintenance-return span,
+.maintenance-return strong {
+    margin: 0 .2rem;
+}
+
+.maintenance-return strong {
+    color: #1b2337;
+}
+
+.maintenance-divider {
+    height: 1px;
+    background: rgba(18, 27, 56, .08);
+}
+
+.maintenance-contact-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: -.35rem;
+}
+
+.maintenance-contact {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 1 auto;
+    max-width: 100%;
+    min-width: 12.5rem;
+    margin: .35rem;
+    padding: .7rem 1.25rem;
+    border: 1px solid rgba(var(--web-primary-rgb, 20, 85, 172), .25);
+    border-radius: 12px;
+    color: var(--web-primary, #1455ac);
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+.maintenance-contact:hover,
+.maintenance-contact:focus {
+    background: rgba(var(--web-primary-rgb, 20, 85, 172), .08);
+    border-color: var(--web-primary, #1455ac);
+    color: var(--web-primary, #1455ac);
+    text-decoration: none;
+}
+
+@media (max-width: 767.98px) {
+    .maintenance-card {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .maintenance-illustration {
+        max-width: 200px;
+    }
+
+    .maintenance-card h2.title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .maintenance-page {
+        padding: 1.25rem 0;
+    }
+
+    .maintenance-card {
+        padding: 1.5rem 1.125rem;
+        border-radius: 16px;
+    }
+
+    .maintenance-illustration {
+        max-width: 170px;
+    }
+
+    .maintenance-card h2.title {
+        font-size: 1.3125rem;
+        line-height: 1.75rem;
+    }
+
+    .maintenance-card p.info {
+        font-size: .875rem;
+        line-height: 1.5rem;
+    }
+
+    .maintenance-contact {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+}

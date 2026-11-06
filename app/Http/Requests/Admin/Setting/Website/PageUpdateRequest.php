@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Requests\Admin\Setting\Website;
+
+use App\Http\Requests\BaseRequest;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
+
+class PageUpdateRequest extends BaseRequest
+{
+    protected $stopOnFirstFailure = true;
+
+    public function rules(): array
+    {
+        if (in_array(Str::slug($this['title']), ['terms-and-conditions', 'about-us', 'privacy-policy'])) {
+            $this->merge(['status' => 1]);
+        }
+
+        return [
+            'title' => [
+                'required', 'string', Rule::unique('business_pages', 'title')->ignore($this['id']),
+            ],
+            'description' => 'string',
+            'slug' => [
+                'string', Rule::unique('business_pages', 'slug')->ignore($this['id']),
+            ],
+            'banner' => getRulesStringForImageValidation(
+                rules: ['nullable', 'image'],
+                skipMimes: ['.svg'],
+                maxSize: getFileUploadMaxSize(unit: 'kb'),
+                isDisallowed: true
+            ),
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => translate(':field is required', ['field' => translate('Title')]),
+            'slug.unique' => translate('Slug must be unique'),
+            'banner.mimes' => translate('Banner image type must be').getFileUploadFormats(skip: '.svg'),
+            'banner.max' => translate('Banner image max size is').getFileUploadMaxSize().'MB',
+        ];
+    }
+
+    public function after(): array
+    {
+        return [
+            function (Validator $validator) {
+
+                $description = $this->input('description');
+                if (is_array($description)) {
+                    $first = reset($description);
+                    $cleanedDescription = is_string($first) ? trim(strip_tags($first)) : null;
+                } else {
+                    $cleanedDescription = is_string($description) ? trim(strip_tags($description)) : null;
+                }
+
+                if (empty($cleanedDescription)) {
+                    $validator->errors()->add(
+                        'description', translate(':field is required', ['field' => translate('Description')]).'!'
+                    );
+                }
+            },
+        ];
+    }
+}

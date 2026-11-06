@@ -1,0 +1,2 @@
+200
+{"status":true,"reply":"Here are some phones you may like.","intent":"product_search","products":[{"id":0,"name":"Sample phone","unit_price_formatted":"$10.00"}],"actions":[]}

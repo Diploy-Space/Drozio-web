@@ -1,0 +1,90 @@
+#blog-status-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.blog-status-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.blog-status-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+#blog-status-cards .blog-status-value {
+    font-size: 1.05rem;
+    line-height: 1.15;
+}
+
+.blog-search-form {
+    min-width: 260px;
+}
+
+.blog-list-table .blog-title-cell {
+    min-width: 190px;
+    max-width: 220px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+}
+
+.blog-list-table th,
+.blog-list-table td {
+    white-space: nowrap;
+    padding-inline: .6rem;
+}
+
+.blog-list-table th:first-child,
+.blog-list-table td:first-child {
+    padding-inline-start: 1rem;
+}
+
+.blog-list-table th:last-child,
+.blog-list-table td:last-child {
+    padding-inline-end: 1rem;
+}
+
+.blog-list-table .blog-writer-cell {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.icon-btn.disabled {
+    opacity: .45;
+    pointer-events: auto;
+    cursor: not-allowed;
+}
+
+.priority-option {
+    cursor: pointer;
+}
+
+.blog-upload-tile {
+    max-width: 325px;
+}
+
+.blog-category-name {
+    min-width: 0;
+    max-width: 170px;
+}
+
+#offcanvasCategory th,
+#offcanvasCategory td {
+    padding-inline: .6rem;
+}
+
+.blog-category-name__text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .blog-category-name {
+        max-width: 120px;
+    }
+}

@@ -1,0 +1,2 @@
+200
+{"status":true,"reply":"I only help with shopping. What are you looking for today?","intent":"off_topic","products":[],"actions":[]}

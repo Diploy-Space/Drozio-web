@@ -1,0 +1,32 @@
+/* ── Status tiles ── */
+#sw-status-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.sw-status-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.sw-status-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+.sw-status-card .sw-status-value {
+    font-size: 1.05rem;
+    line-height: 1.15;
+}
+
+/* ── Read-only credential fields ── */
+.sw-field .form-control[readonly] {
+    background-color: var(--bs-secondary-bg, #f4f6f8);
+    box-shadow: none;
+    cursor: default;
+}
+
+.badge-soft-secondary {
+    background: rgba(0, 0, 0, .06);
+    color: var(--bs-secondary-color, #6b7280);
+}

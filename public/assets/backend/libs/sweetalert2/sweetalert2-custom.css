@@ -1,0 +1,218 @@
+/* =====================================================================
+   SweetAlert2 — panel theme (admin + vendor).
+
+   Two things force the shape of this file:
+
+   1. The bundle injects its own stylesheet into a <style> tag at runtime,
+      which always lands after this <link>. Its selectors are the same
+      `div:where(...)` chains used here, so every colliding property has to
+      be !important to survive the tie-break on source order. Properties the
+      library does not set are left plain, and its own --swal2-* variables
+      are preferred over hard overrides wherever it exposes one.
+
+   2. Call sites pass their own confirmButtonColor / cancelButtonColor, and
+      the values are inconsistent across the 30-odd files that use them
+      (#1455AC, #161853, #377dff for confirm; #d33, #dd3333 for cancel).
+      They are re-declared here so every dialog reads the same: confirm
+      carries the action, cancel stays neutral rather than shouting in red.
+   ===================================================================== */
+
+div:where(.swal2-container) {
+    --swal2-width: 26.5em !important;
+    --swal2-padding: 1.75rem 1.5rem 1.5rem !important;
+    --swal2-border: 1px solid rgba(15, 23, 42, 0.06) !important;
+    --swal2-border-radius: 16px !important;
+    --swal2-backdrop: rgba(15, 23, 42, 0.45) !important;
+    --swal2-color: var(--bs-body-color, #656566) !important;
+    --swal2-title-padding: 0 0 0.35rem !important;
+    --swal2-html-container-padding: 0 0.5rem !important;
+    --swal2-outline: 0 0 0 3px rgba(var(--bs-primary-rgb, 20, 85, 172), 0.25) !important;
+    --swal2-show-animation: swal2-panel-show 0.22s cubic-bezier(0.2, 0.8, 0.3, 1) !important;
+    --swal2-close-button-color: var(--body-light-color, #a7a7a7) !important;
+    --swal2-close-button-font-size: 1.6rem !important;
+    --swal2-close-button-hover-transform: none !important;
+    --swal2-input-background: var(--bs-white, #fff) !important;
+
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+    box-shadow:
+        0 24px 60px -14px rgba(15, 23, 42, 0.3),
+        0 8px 20px -10px rgba(15, 23, 42, 0.16);
+}
+
+@keyframes swal2-panel-show {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    div:where(.swal2-container) {
+        --swal2-show-animation: none !important;
+    }
+}
+
+/* --- Icon: a soft tinted disc instead of the default hairline ring ----- */
+
+/* Scaled with font-size, not width/height: the x-mark and success-check strokes
+   are positioned in em against the icon box, so resizing the box alone throws
+   them off centre. */
+div:where(.swal2-icon) {
+    font-size: 0.8em !important;
+    margin: 0 auto 1.1rem !important;
+    border: 0 !important;
+}
+
+div:where(.swal2-icon).swal2-warning {
+    background: #fff4e0;
+    color: #b46b00 !important;
+}
+
+div:where(.swal2-icon).swal2-error {
+    background: #ffeaea;
+    color: var(--bs-danger, #ff4040) !important;
+}
+
+div:where(.swal2-icon).swal2-error .swal2-x-mark-line {
+    background-color: var(--bs-danger, #ff4040) !important;
+}
+
+div:where(.swal2-icon).swal2-info,
+div:where(.swal2-icon).swal2-question {
+    background: rgba(var(--bs-primary-rgb, 20, 85, 172), 0.1);
+    color: var(--bs-primary, #1455ac) !important;
+}
+
+div:where(.swal2-icon).swal2-success {
+    background: #e6f7f0;
+    color: var(--bs-success, #04bb7b) !important;
+}
+
+div:where(.swal2-icon).swal2-success .swal2-success-ring {
+    border-color: transparent !important;
+}
+
+div:where(.swal2-icon).swal2-success .swal2-success-line-tip,
+div:where(.swal2-icon).swal2-success .swal2-success-line-long {
+    background-color: var(--bs-success, #04bb7b) !important;
+}
+
+/* Masks the library animates over the ring; with the ring gone they would
+   otherwise paint white wedges across the tinted disc. */
+div:where(.swal2-icon).swal2-success [class^="swal2-success-circular-line"],
+div:where(.swal2-icon).swal2-success .swal2-success-fix {
+    background-color: transparent !important;
+}
+
+/* --- Copy -------------------------------------------------------------- */
+
+div:where(.swal2-container) h2:where(.swal2-title) {
+    color: var(--bs-dark, #222324) !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    line-height: 1.35;
+}
+
+div:where(.swal2-container) div:where(.swal2-html-container) {
+    margin: 0.4rem 0 0 !important;
+    color: var(--bs-body-color, #656566) !important;
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+}
+
+/* --- Actions ----------------------------------------------------------- */
+
+div:where(.swal2-container) div:where(.swal2-actions) {
+    width: 100% !important;
+    margin: 1.5rem 0 0 !important;
+    padding: 1.25rem 0 0 !important;
+    gap: 0.625rem;
+    border-top: 1px solid var(--bs-border-color, #e9e9ea);
+}
+
+div:where(.swal2-container) button:where(.swal2-styled) {
+    min-width: 116px !important;
+    height: 42px;
+    margin: 0 !important;
+    padding: 0 1.25rem !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):focus-visible {
+    box-shadow: var(--swal2-outline) !important;
+}
+
+/* SweetAlert writes confirmButtonColor / cancelButtonColor as an inline custom
+   property on the button itself, so the override has to land on the button too
+   — setting it on the popup would only lose to the inline value on inherit. */
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+    --swal2-confirm-button-background-color: var(--bs-primary, #1455ac) !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+    --swal2-cancel-button-background-color: var(--bs-white, #fff) !important;
+
+    border: 1px solid var(--bs-border-color, #e9e9ea) !important;
+    color: var(--bs-dark, #222324) !important;
+}
+
+div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) button:where(.swal2-styled):where(.swal2-cancel):hover {
+    background-image: none;
+    background-color: var(--section-bg2, #f0f2f5) !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny) {
+    --swal2-deny-button-background-color: var(--bs-danger, #ff4040) !important;
+}
+
+/* --- Close button + inputs --------------------------------------------- */
+
+div:where(.swal2-container) button:where(.swal2-close) {
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 50%;
+}
+
+div:where(.swal2-container) button:where(.swal2-close):hover {
+    background: var(--section-bg2, #f0f2f5) !important;
+    color: var(--bs-dark, #222324) !important;
+}
+
+div:where(.swal2-container) input:where(.swal2-input),
+div:where(.swal2-container) input:where(.swal2-file),
+div:where(.swal2-container) textarea:where(.swal2-textarea),
+div:where(.swal2-container) select:where(.swal2-select) {
+    height: 42px !important;
+    margin: 1rem 0 0 !important;
+    padding: 0 0.875rem !important;
+    border: 1px solid var(--bs-border-color, #e9e9ea) !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+    font-size: 0.875rem !important;
+}
+
+div:where(.swal2-container) textarea:where(.swal2-textarea) {
+    height: auto !important;
+    padding: 0.75rem 0.875rem !important;
+}
+
+div:where(.swal2-container) input:where(.swal2-input):focus,
+div:where(.swal2-container) textarea:where(.swal2-textarea):focus,
+div:where(.swal2-container) select:where(.swal2-select):focus {
+    border-color: var(--bs-primary, #1455ac) !important;
+    box-shadow: var(--swal2-outline) !important;
+}

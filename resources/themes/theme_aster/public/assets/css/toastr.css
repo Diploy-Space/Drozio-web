@@ -1,0 +1,208 @@
+/*
+ * Modern toastr styling — 6valley customer storefront.
+ * Keeps every toastMagic.js class hook (#toast-container, .toast-success/-error/
+ * -info/-warning, .toast-title, .toast-message, .toast-close-button,
+ * .toast-progress) so the library keeps working — only the visuals change:
+ * a clean white card, soft-tint colored icon, gradient progress bar and the
+ * same semantic palette used across the admin & vendor panels.
+ */
+
+#toast-container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+#toast-container * {
+    box-sizing: border-box;
+}
+
+/* --- Positions --- */
+.toast-top-center { top: 16px; right: 0; width: 100%; }
+.toast-bottom-center { bottom: 16px; right: 0; width: 100%; }
+.toast-top-full-width { top: 0; right: 0; width: 100%; }
+.toast-bottom-full-width { bottom: 0; right: 0; width: 100%; }
+.toast-top-left { top: 16px; left: 16px; }
+.toast-top-right { top: 16px; right: 16px; }
+.toast-bottom-right { right: 16px; bottom: 16px; }
+.toast-bottom-left { bottom: 16px; left: 16px; }
+
+/* --- Card --- */
+#toast-container > div {
+    position: relative;
+    pointer-events: auto;
+    overflow: hidden;
+    margin: 0 0 12px;
+    padding: 15px 44px 15px 56px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    box-shadow: 0 12px 28px -8px rgba(16, 24, 40, 0.18), 0 4px 10px -6px rgba(16, 24, 40, 0.10);
+    color: #475467;
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-position: 16px 16px;
+    background-size: 26px 26px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#toast-container > div:hover {
+    box-shadow: 0 16px 34px -8px rgba(16, 24, 40, 0.24), 0 6px 12px -6px rgba(16, 24, 40, 0.12);
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* Left color accent */
+#toast-container > div::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+/* --- Text --- */
+.toast-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    color: #101828;
+    margin-bottom: 2px;
+}
+
+.toast-message {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #475467;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.toast-message a,
+.toast-message label {
+    color: #101828;
+}
+
+.toast-message a:hover {
+    color: #475467;
+    text-decoration: underline;
+}
+
+/* --- Close button --- */
+.toast-close-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    float: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+    color: #98a2b3;
+    text-shadow: none;
+    opacity: 1;
+    background: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.toast-close-button:hover,
+.toast-close-button:focus {
+    color: #101828;
+    background: rgba(16, 24, 40, 0.06);
+    outline: none;
+    opacity: 1;
+    cursor: pointer;
+}
+
+button.toast-close-button {
+    padding: 0;
+    cursor: pointer;
+    border: 0;
+    -webkit-appearance: none;
+}
+
+/* --- Type accents + icons --- */
+.toast-success::before { background: #12b76a; }
+.toast-error::before { background: #f04438; }
+.toast-info::before { background: #2e90fa; }
+.toast-warning::before { background: #f79009; }
+
+.toast {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23475467'/%3E%3Ccircle cx='12' cy='7.6' r='1.35' fill='%23fff'/%3E%3Cpath d='M12 11v6.4' stroke='%23fff' stroke-width='2.3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.toast-success {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%2312b76a'/%3E%3Cpath d='M7 12.6l3.2 3.2L17 8.4' fill='none' stroke='%23fff' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.toast-error {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23f04438'/%3E%3Cpath d='M8.7 8.7l6.6 6.6M15.3 8.7l-6.6 6.6' stroke='%23fff' stroke-width='2.3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.toast-info {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%232e90fa'/%3E%3Ccircle cx='12' cy='7.6' r='1.35' fill='%23fff'/%3E%3Cpath d='M12 11v6.4' stroke='%23fff' stroke-width='2.3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.toast-warning {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23f79009'/%3E%3Cpath d='M12 6.5v7.2' stroke='%23fff' stroke-width='2.3' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='17' r='1.35' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+/* --- Progress bar --- */
+.toast-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    opacity: 1;
+    border-radius: 0 3px 3px 0;
+}
+
+.toast-success .toast-progress { background: #12b76a; }
+.toast-error .toast-progress { background: #f04438; }
+.toast-info .toast-progress { background: #2e90fa; }
+.toast-warning .toast-progress { background: #f79009; }
+
+/* --- Center & full-width widths --- */
+#toast-container.toast-top-center > div,
+#toast-container.toast-bottom-center > div {
+    width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#toast-container.toast-top-full-width > div,
+#toast-container.toast-bottom-full-width > div {
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- RTL --- */
+#toast-container > div.rtl {
+    direction: rtl;
+    padding: 15px 56px 15px 44px;
+    background-position: right 16px top 16px;
+}
+
+#toast-container > div.rtl::before {
+    left: auto;
+    right: 0;
+}
+
+.rtl .toast-close-button {
+    left: 12px;
+    right: auto;
+}
+
+/* --- Responsive --- */
+@media all and (max-width: 480px) {
+    #toast-container > div {
+        width: calc(100vw - 24px);
+    }
+}

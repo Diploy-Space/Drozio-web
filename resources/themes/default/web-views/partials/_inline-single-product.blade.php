@@ -1,0 +1,75 @@
+@php($overallRating = $product?->overall_rating)
+
+<div class="product-single-hover style--card h-100">
+    <div class="overflow-hidden position-relative">
+        <div class="inline_product clickable d-flex justify-content-center">
+            @if($product->discount_value > 0)
+                <div class="d-flex">
+                    <span class="for-discount-value p-1 pl-2 pr-2 font-bold fs-13">
+                        <span class="direction-ltr d-block">
+                            -{{ $product->discount_label }}
+                        </span>
+                    </span>
+                </div>
+            @else
+                <div class="d-flex justify-content-end">
+                    <span class="for-discount-value-null"></span>
+                </div>
+            @endif
+
+            <div class="d-flex pb-0">
+                <a href="{{route('product',$product->slug)}}" class="w-100 rounded">
+                    <img loading="lazy" decoding="async" alt="{{ $product['name'] }}" class="border border-black-50"
+                         src="{{ getStorageImages(path: $product->thumbnail_full_url, type: 'product') }}">
+                </a>
+            </div>
+
+            <div class="quick-view">
+                <div class="d-none d-md-flex gap-2 align-items-center quick-view-tag">
+                    @if($product->product_type == 'digital')
+                        <div class="bg-white btn-circle" style="--size: 26px" data-toggle="tooltip" title="{{ translate('Digital Product') }}" data-placement="left">
+                            <img loading="lazy" class="h-16px aspect-1 svg" src="{{theme_asset(path: "public/assets/front-end/img/icons/digital-product.svg")}}" alt="{{ translate('Digital Product') }}">
+                        </div>
+                    @else
+                        <div class="bg-white btn-circle" style="--size: 26px" data-toggle="tooltip" title="{{ translate('Physical Product') }}" data-placement="left">
+                            <img loading="lazy" class="h-16px aspect-1 svg" src="{{ theme_asset(path: "public/assets/front-end/img/icons/physical-product.svg") }}" alt="{{ translate('Physical Product') }}">
+                        </div>
+                    @endif
+                </div>
+                <a class="btn-circle stopPropagation action-product-quick-view" href="javascript:" data-product-id="{{ $product->id }}">
+                    <i class="czi-eye align-middle"></i>
+                </a>
+            </div>
+
+            @if($product->product_type == 'physical' && $product->current_stock <= 0)
+                <span class="out_fo_stock">{{translate('Out of Stock')}}</span>
+            @endif
+        </div>
+
+        <div class="single-product-details">
+            <h3 class="text-center mb-0 letter-spacing-0">
+                <a href="{{route('product',$product->slug)}}" class="fw-semibold">
+                    {{ $product['name'] }}
+                </a>
+            </h3>
+            <div class="justify-content-between text-center mb-1">
+                <h4 class="product-price text-center d-flex flex-wrap justify-content-center align-items-center gap-8 mb-0 letter-spacing-0">
+                    @if($product->discount_value > 0)
+                        <del class="category-single-product-price fs-14 font-weight-normal">
+                            {{ webCurrencyConverter(amount: $product->unit_price) }}
+                        </del>
+                    @endif
+                    <span class="text-accent text-dark fs-15">
+                        {{ $product->discounted_unit_price_label }}
+                    </span>
+                </h4>
+            </div>
+            @include('web-views.partials._rating-display', [
+                'rating' => $overallRating[0],
+                'count' => $product->total_reviews,
+                'size' => 'sm',
+                'align' => 'center',
+            ])
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+/* ── Metric tiles ── */
+#db-metric-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.db-metric-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.db-metric-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+/* ── Selectable table item ── */
+.db-table-item {
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+    width: 100%;
+    margin: 0;
+    padding: .625rem .75rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--bs-body-bg);
+    transition: border-color .15s ease, background-color .15s ease;
+}
+
+.db-table-item:hover {
+    border-color: var(--bs-primary);
+}
+
+.db-table-item:has(.checkbox--input:checked) {
+    border-color: var(--bs-danger);
+    background: rgba(var(--bs-danger-rgb), .05);
+}
+
+.db-table-item .db-table-name {
+    min-width: 0;
+    flex: 1 1 auto;
+    word-break: break-word;
+    font-size: .82rem;
+    text-transform: capitalize;
+}
+
+.db-table-item .db-table-count {
+    flex-shrink: 0;
+}
+
+/* Protected system tables: visible but not selectable */
+.db-table-item.db-table-protected {
+    cursor: not-allowed;
+    background: var(--bs-secondary-bg, #f4f6f8);
+    opacity: .75;
+}
+
+.db-table-item.db-table-protected:hover {
+    border-color: var(--bs-border-color);
+}
+
+.db-table-item.db-table-protected .checkbox--input {
+    cursor: not-allowed;
+}
+
+.db-empty-search {
+    display: none;
+}

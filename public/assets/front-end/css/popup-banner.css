@@ -1,0 +1,225 @@
+/* Storefront popup banner. Bootstrap animates `.modal-dialog` on `.show` but reads the
+   hide duration off `.modal` itself, so the panel's exit transition and the `.fade`
+   opacity transition below have to stay in step or the close gets clipped at 150ms. */
+
+.modal-popup-banner {
+    --bs-modal-width: 520px;
+    --pb-radius: 18px;
+    --pb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --pb-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+    --pb-surface: #ffffff;
+    --pb-skeleton: #eef1f6;
+    --pb-skeleton-sheen: #f8fafc;
+}
+
+.modal-popup-banner.fade {
+    transition: opacity 0.34s ease;
+    -webkit-backdrop-filter: blur(6px) saturate(115%);
+    backdrop-filter: blur(6px) saturate(115%);
+}
+
+.modal-popup-banner .modal-dialog {
+    padding: 1.25rem;
+}
+
+/* Enter and exit are two transitions, not a keyframe: Chrome does not start a transition
+   off a removed animation, so an animated entrance leaves the panel snapping out on close. */
+.modal-popup-banner.fade .modal-dialog {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0) scale(0.94);
+    transition: transform 0.24s ease-in, opacity 0.22s ease-in;
+}
+
+.modal-popup-banner.show .modal-dialog {
+    opacity: 1;
+    transform: none;
+    transition: transform 0.52s var(--pb-spring), opacity 0.3s ease;
+}
+
+.modal-popup-banner .modal-content {
+    position: relative;
+    border: 0;
+    border-radius: var(--pb-radius);
+    background-color: var(--pb-surface);
+    box-shadow: 0 30px 70px rgba(16, 20, 28, 0.28), 0 6px 18px rgba(16, 20, 28, 0.12);
+    overflow: visible;
+}
+
+.modal-popup-banner .pb-media {
+    position: relative;
+    display: block;
+    border-radius: var(--pb-radius);
+    background-color: var(--pb-skeleton);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Shimmer stands in until the artwork decodes so the panel never opens on an empty frame. */
+.modal-popup-banner .pb-media::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        100deg,
+        var(--pb-skeleton) 30%,
+        var(--pb-skeleton-sheen) 50%,
+        var(--pb-skeleton) 70%
+    );
+    background-size: 220% 100%;
+    animation: pb-shimmer 1.4s linear infinite;
+}
+
+.modal-popup-banner .pb-media.is-loaded::before {
+    opacity: 0;
+    animation: none;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes pb-shimmer {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: -100% 0;
+    }
+}
+
+.modal-popup-banner .pb-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.45s ease, transform 0.7s var(--pb-ease);
+}
+
+.modal-popup-banner .pb-media.is-loaded .pb-image {
+    opacity: 1;
+    transform: none;
+}
+
+.modal-popup-banner .pb-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+}
+
+.modal-popup-banner .pb-media.is-loaded:hover .pb-image {
+    transform: scale(1.035);
+}
+
+.modal-popup-banner .pb-link:focus-visible {
+    outline: 3px solid var(--web-primary, #ef7822);
+    outline-offset: -3px;
+}
+
+.modal-popup-banner .pb-close {
+    position: absolute;
+    inset-block-start: -13px;
+    inset-inline-end: -13px;
+    z-index: 6;
+    margin: 0;
+    padding: 0;
+    inline-size: 38px;
+    block-size: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background-color: var(--pb-surface);
+    color: #3d4757;
+    opacity: 0;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(16, 20, 28, 0.22);
+    transition: transform 0.25s var(--pb-ease), background-color 0.2s ease, color 0.2s ease,
+        opacity 0.3s ease;
+}
+
+.modal-popup-banner.show .pb-close {
+    opacity: 1;
+    transition-delay: 0.25s;
+}
+
+/* Two strokes rather than `&times;` — the glyph sits off-centre in the theme's font stack. */
+.modal-popup-banner .pb-close span {
+    position: relative;
+    display: block;
+    inline-size: 14px;
+    block-size: 14px;
+}
+
+.modal-popup-banner .pb-close span::before,
+.modal-popup-banner .pb-close span::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 1.75px;
+    border-radius: 2px;
+    background-color: currentColor;
+}
+
+.modal-popup-banner .pb-close span::before {
+    transform: rotate(45deg);
+}
+
+.modal-popup-banner .pb-close span::after {
+    transform: rotate(-45deg);
+}
+
+.modal-popup-banner .pb-close:hover,
+.modal-popup-banner .pb-close:focus-visible {
+    background-color: var(--web-primary, #ef7822);
+    color: #ffffff;
+    transform: rotate(90deg) scale(1.06);
+}
+
+.modal-popup-banner .pb-close:focus-visible {
+    outline: 2px solid var(--web-primary, #ef7822);
+    outline-offset: 3px;
+}
+
+@media (max-width: 575px) {
+    .modal-popup-banner {
+        --bs-modal-width: 100%;
+    }
+
+    .modal-popup-banner .modal-dialog {
+        padding: 0.75rem;
+    }
+
+    .modal-popup-banner .pb-close {
+        inset-block-start: 10px;
+        inset-inline-end: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal-popup-banner.fade,
+    .modal-popup-banner.fade .modal-dialog,
+    .modal-popup-banner .pb-image,
+    .modal-popup-banner .pb-close {
+        transition-duration: 0.01ms;
+    }
+
+    .modal-popup-banner.fade .modal-dialog {
+        transform: none;
+    }
+
+    .modal-popup-banner.show .modal-dialog {
+        transition-duration: 0.01ms;
+    }
+
+    .modal-popup-banner .pb-media::before {
+        animation: none;
+    }
+
+    .modal-popup-banner .pb-media.is-loaded:hover .pb-image {
+        transform: none;
+    }
+}

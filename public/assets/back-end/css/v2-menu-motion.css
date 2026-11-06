@@ -1,0 +1,234 @@
+/* =====================================================================
+   6Valley v2 shell — menu motion (admin + vendor)
+
+   Three additive layers over the existing sidebar. Nothing here changes
+   layout or colour: if this stylesheet fails to load the menu still
+   switches, just without the motion.
+
+     1. Water-drop ripple   — pointer feedback on rail icons and menu rows
+     2. Sliding rail marker — the active pill glides between rail icons
+     3. Section transition  — outgoing menu dissolves, a drop-wave sweeps
+                              the panel, incoming groups rise in
+
+   All scoped under .app-v2 / .v2-rail-flyout so nothing leaks into
+   @yield('content').
+   ===================================================================== */
+
+.app-v2,
+.v2-rail-flyout {
+    --v2-motion-swift:  cubic-bezier(0.22, 1, 0.36, 1);
+    --v2-motion-liquid: cubic-bezier(0.34, 1.36, 0.44, 1);
+    --v2-drop-tint: var(--v2-primary, #1F4FD6);
+}
+
+/* =====================================================================
+   1 · WATER-DROP RIPPLE
+   A droplet core plus two concentric rings, spawned at the pointer.
+   The host is a self-clipping overlay so the rail button keeps its own
+   overflow (its active accent bar sits outside the button box).
+   ===================================================================== */
+.v2-drop-host {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Keep the row's own content above the ripple it is painted behind. */
+:is(.app-v2, .v2-rail-flyout) :is(.v2-rail-btn, .v2-nav-item, .v2-nav-child, .v2-rail-setup) {
+    position: relative;
+}
+:is(.app-v2, .v2-rail-flyout) :is(.v2-rail-btn, .v2-nav-item, .v2-nav-child, .v2-rail-setup) > *:not(.v2-drop-host) {
+    position: relative;
+    z-index: 1;
+}
+
+.v2-drop {
+    position: absolute;
+    left: var(--v2-drop-x, 50%);
+    top: var(--v2-drop-y, 50%);
+    width: var(--v2-drop-size, 44px);
+    height: var(--v2-drop-size, 44px);
+    margin-left: calc(var(--v2-drop-size, 44px) / -2);
+    margin-top: calc(var(--v2-drop-size, 44px) / -2);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.v2-drop > i {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-radius: 50%;
+    will-change: transform, opacity;
+}
+.v2-drop > .v2-drop-core {
+    background: radial-gradient(circle at center,
+        color-mix(in srgb, var(--v2-drop-tint) 52%, transparent) 0%,
+        color-mix(in srgb, var(--v2-drop-tint) 22%, transparent) 46%,
+        transparent 72%);
+    animation: v2-drop-core 560ms var(--v2-motion-swift) both;
+}
+.v2-drop > .v2-drop-ring {
+    border: 1.5px solid color-mix(in srgb, var(--v2-drop-tint) 62%, transparent);
+    animation: v2-drop-ring 620ms var(--v2-motion-swift) both;
+}
+.v2-drop > .v2-drop-ring-late {
+    border-width: 1px;
+    border-color: color-mix(in srgb, var(--v2-drop-tint) 38%, transparent);
+    animation-duration: 780ms;
+    animation-delay: 110ms;
+}
+
+@keyframes v2-drop-core {
+    0%   { transform: scale(0.12); opacity: 0.95; }
+    55%  { opacity: 0.4; }
+    100% { transform: scale(1); opacity: 0; }
+}
+@keyframes v2-drop-ring {
+    0%   { transform: scale(0.08); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+/* On the rail the pill is already primary once activated, so the drop
+   reads as light-on-primary rather than primary-on-light. */
+.app-v2 > .v2-rail .v2-rail-btn { --v2-drop-tint: var(--v2-primary); }
+.app-v2 > .v2-rail .v2-rail-btn.v2-is-active { --v2-drop-tint: #FFFFFF; }
+
+/* =====================================================================
+   2 · SLIDING RAIL MARKER
+   One pill, moved with a transform, instead of a background that jumps
+   between buttons. A brief squash/stretch on departure gives it weight.
+   ===================================================================== */
+.app-v2 > .v2-rail .v2-rail-items { position: relative; }
+
+.v2-rail-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: var(--v2-primary);
+    box-shadow: 0 4px 12px -2px color-mix(in srgb, var(--v2-primary) 40%, transparent);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 0;
+    transform: translate3d(var(--v2-marker-x, 0), var(--v2-marker-y, 0), 0)
+               scale(var(--v2-marker-sx, 1), var(--v2-marker-sy, 1));
+    transition: transform 440ms var(--v2-motion-liquid),
+                width 440ms var(--v2-motion-liquid),
+                height 440ms var(--v2-motion-liquid),
+                opacity 180ms ease;
+    will-change: transform;
+}
+.v2-rail-marker.v2-is-ready { opacity: 1; }
+/* First placement, and any placement while the rail is hidden, must not
+   animate in from the top-left corner. */
+.v2-rail-marker.v2-no-anim { transition: none; }
+
+.app-v2 > .v2-rail.v2-has-marker .v2-rail-btn { z-index: 1; }
+.app-v2 > .v2-rail.v2-has-marker .v2-rail-btn.v2-is-active {
+    background: transparent;
+    box-shadow: none;
+}
+/* The marker replaces the per-button accent bar as the active indicator. */
+.app-v2 > .v2-rail.v2-has-marker .v2-rail-btn.v2-is-active::before { display: none; }
+
+/* =====================================================================
+   3 · SECTION TRANSITION
+   ===================================================================== */
+
+/* 3a — the outgoing menu, cloned inert and dissolved out in place. */
+.v2-ctx-ghost {
+    position: absolute;
+    inset-inline-start: 0;
+    top: var(--v2-ghost-shift, 0);
+    padding: 14px 10px 90px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+    animation: v2-ghost-out 260ms ease both;
+}
+@keyframes v2-ghost-out {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-8px) scale(0.985); }
+}
+
+/* 3b — the drop-wave, released from the rail icon that was tapped and
+   spreading across the panel just ahead of the incoming groups. */
+.v2-ctx-wave {
+    position: absolute;
+    left: var(--v2-wave-x, 0);
+    top: var(--v2-wave-y, 0);
+    width: var(--v2-wave-d, 400px);
+    height: var(--v2-wave-d, 400px);
+    margin-left: calc(var(--v2-wave-d, 400px) / -2);
+    margin-top: calc(var(--v2-wave-d, 400px) / -2);
+    border-radius: 50%;
+    pointer-events: none;
+    /* Under .v2-ctx-foot (z-index 3) so the setup-guide is never washed over. */
+    z-index: 2;
+}
+.v2-ctx-wave > i {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-radius: 50%;
+    will-change: transform, opacity;
+}
+.v2-ctx-wave > .v2-wave-fill {
+    background: radial-gradient(circle at center,
+        color-mix(in srgb, var(--v2-primary) 24%, transparent) 0%,
+        color-mix(in srgb, var(--v2-primary) 11%, transparent) 42%,
+        transparent 70%);
+    animation: v2-wave-fill 720ms var(--v2-motion-swift) both;
+}
+.v2-ctx-wave > .v2-wave-ring {
+    border: 2px solid color-mix(in srgb, var(--v2-primary) 40%, transparent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--v2-primary) 16%, transparent);
+    animation: v2-wave-ring 760ms var(--v2-motion-swift) both;
+}
+.v2-ctx-wave > .v2-wave-ring-late {
+    border-width: 1px;
+    border-color: color-mix(in srgb, var(--v2-primary) 26%, transparent);
+    box-shadow: none;
+    animation-duration: 900ms;
+    animation-delay: 130ms;
+}
+@keyframes v2-wave-fill {
+    0%   { transform: scale(0.05); opacity: 1; }
+    60%  { opacity: 0.5; }
+    100% { transform: scale(1); opacity: 0; }
+}
+@keyframes v2-wave-ring {
+    0%   { transform: scale(0.04); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+/* 3c — the incoming menu, group by group, riding the wave outward. */
+.v2-ctx-section.v2-sec-enter > * {
+    animation: v2-sec-rise 420ms var(--v2-motion-swift) both;
+}
+.v2-ctx-section.v2-sec-enter > *:nth-child(1) { animation-delay: 20ms; }
+.v2-ctx-section.v2-sec-enter > *:nth-child(2) { animation-delay: 55ms; }
+.v2-ctx-section.v2-sec-enter > *:nth-child(3) { animation-delay: 90ms; }
+.v2-ctx-section.v2-sec-enter > *:nth-child(4) { animation-delay: 125ms; }
+.v2-ctx-section.v2-sec-enter > *:nth-child(5) { animation-delay: 160ms; }
+.v2-ctx-section.v2-sec-enter > *:nth-child(n+6) { animation-delay: 190ms; }
+@keyframes v2-sec-rise {
+    0%   { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: none; }
+}
+
+/* =====================================================================
+   REDUCED MOTION — every layer above is decoration; drop it entirely.
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    .v2-drop,
+    .v2-ctx-wave,
+    .v2-ctx-ghost { display: none !important; }
+    .v2-ctx-section.v2-sec-enter > * { animation: none !important; }
+    .v2-rail-marker { transition: opacity 120ms ease !important; }
+}

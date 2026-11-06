@@ -1,0 +1,2 @@
+200
+{"status":true,"sessions":[{"id":0,"customer_id":null,"guest_id":"guest-characterization","title":"show me phones","locale":"en","context":null,"last_activity_at":"2026-09-21T04:00:00.000000Z","created_at":"2026-09-21T04:00:00.000000Z","updated_at":"2026-09-21T04:00:00.000000Z","messages_count":2}]}

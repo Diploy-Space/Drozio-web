@@ -1,0 +1,48 @@
+#contact-overview-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+#contact-overview-cards .card-body {
+    padding: .85rem 1rem;
+}
+
+#contact-overview-cards .contact-overview-value {
+    font-size: 1.05rem;
+    line-height: 1.1;
+}
+
+.contact-overview-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.contact-overview-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+.contact-thread-bubble {
+    background-color: var(--bs-secondary-bg, #f4f6f8);
+    border-radius: .5rem;
+    padding: .75rem 1rem;
+    word-break: break-word;
+}
+
+.contact-thread-text {
+    white-space: pre-line;
+}
+
+.contact-thread-bubble-admin {
+    background-color: rgba(var(--bs-primary-rgb), .06);
+}
+
+.contact-thread-empty {
+    border: 1px dashed var(--bs-border-color, #e5e7eb);
+    border-radius: .5rem;
+    padding: .75rem 1rem;
+}
+
+.contact-mail-body {
+    min-height: 160px;
+}

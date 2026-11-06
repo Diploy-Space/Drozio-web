@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'Digital Variation' => 'Digital Variation',
+    'Search for retail products' => 'Search for retail products',
+    'Search for auction products' => 'Search for auction products',
+    'Search for retail products' => 'Search for retail products',
+    'Search for auction products' => 'Search for auction products',
+    'Search for wholesale products' => 'Search for wholesale products',
+    'Our top selling wholesale products' => 'Our top selling wholesale products',
+    'Wholesale products in this category' => 'Wholesale products in this category',
+    'Search in :name' => 'Search in :name',
+    'Sub total (:variations variation, :items items)' => 'Sub total (:variations variation, :items items)',
+    'Update variation' => 'Update variation',
+    'Add to cart' => 'Add to cart',
+    'Update cart' => 'Update cart',
+    'Seller info' => 'Seller info',
+    'More from this seller' => 'More from this seller',
+    'Selected variation' => 'Selected variation',
+    'Per :unit' => 'Per :unit',
+    'All Manufacturers' => 'All Manufacturers',
+    'Search by manufacturer name' => 'Search by manufacturer name',
+    'Browse every wholesale product in one place' => 'Browse every wholesale product in one place',
+    'Tier price' => 'Tier price',
+    'Add quantity' => 'Add quantity',
+];

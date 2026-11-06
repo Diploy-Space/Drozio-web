@@ -1,0 +1,83 @@
+#addon-status-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.addon-status-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.addon-status-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+#addon-status-cards .addon-status-value {
+    font-size: 1.05rem;
+    line-height: 1.15;
+}
+
+.addon-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, max(200px, (100% - 3rem) / 4)), 1fr));
+    grid-auto-rows: 1fr;
+    gap: 1rem;
+}
+
+.addon-card {
+    min-width: 0;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.addon-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .07);
+}
+
+.addon-card.theme-active {
+    border-color: var(--bs-success) !important;
+}
+
+.addon-card.addon-unsupported {
+    border-color: rgba(var(--bs-danger-rgb), .35) !important;
+}
+
+.addon-version {
+    line-height: 1.6;
+}
+
+.addon-card .card-body {
+    min-width: 0;
+}
+
+.addon-card-title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+}
+
+.addon-card-footer {
+    min-height: 1.875rem;
+}
+
+.addon-thumb {
+    aspect-ratio: 16 / 9;
+    max-height: 200px;
+    overflow: hidden;
+    background: var(--bs-secondary-bg, #f4f6f8);
+}
+
+.badge-soft-secondary {
+    background: rgba(0, 0, 0, .06);
+    color: var(--bs-secondary-color, #6b7280);
+}
+
+#uploadAddonOffcanvas {
+    width: 480px;
+    max-width: 92vw;
+}
+
+#uploadAddonOffcanvas .offcanvas-body {
+    display: flex;
+    flex-direction: column;
+}

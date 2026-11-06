@@ -1,0 +1,47 @@
+/* ── Metric tiles ── */
+#currency-metric-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.currency-metric-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.currency-metric-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+#currency-metric-cards h3 {
+    font-size: 1.05rem;
+}
+
+/* ── Add-currency slide-in panel ── */
+#addCurrencyOffcanvas {
+    width: 460px;
+    max-width: 92vw;
+}
+
+.currency-search {
+    min-width: 260px;
+}
+
+@media (max-width: 767.98px) {
+    .currency-list-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .currency-list-actions > form,
+    .currency-search {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .currency-list-actions .btn {
+        justify-content: center;
+    }
+}

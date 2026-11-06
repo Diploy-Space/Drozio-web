@@ -1,0 +1,62 @@
+/* ── Status overview tiles ── */
+#env-status-cards .stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+#env-status-cards .card-body {
+    padding: .85rem 1rem;
+}
+
+#env-status-cards .env-status-value {
+    font-size: 1.05rem;
+    line-height: 1.1;
+}
+
+.env-status-card {
+    border: 1px solid transparent;
+    transition: box-shadow .2s ease;
+}
+
+.env-status-card:hover {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .06);
+}
+
+/* ── Read-only / secret fields ── */
+.env-field .form-control[readonly] {
+    background-color: var(--bs-secondary-bg, #f4f6f8);
+    color: var(--bs-body-color);
+    box-shadow: none;
+    cursor: default;
+}
+
+.env-field .input-group-text {
+    background-color: var(--bs-secondary-bg, #f4f6f8);
+    color: var(--bs-secondary-color, #6b7280);
+}
+
+.env-field .env-reveal {
+    border: 1px solid var(--bs-border-color);
+    cursor: pointer;
+    transition: color .15s ease;
+}
+
+.env-field .env-reveal:hover {
+    color: var(--bs-primary);
+}
+
+/* ── Subsection headings inside the info card ── */
+.env-subsection-title {
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--bs-secondary-color, #6b7280);
+}
+
+.env-subsection + .env-subsection {
+    border-top: 1px dashed var(--bs-border-color);
+    padding-top: 1.25rem;
+    margin-top: 1.25rem;
+}

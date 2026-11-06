@@ -1,0 +1,249 @@
+<?php
+
+namespace App\Providers;
+
+use App\Services\New\SoftwareUpdateService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
+
+class RouteServiceProvider extends ServiceProvider
+{
+    protected $namespace = 'App\Http\Controllers';
+
+    public const HOME = '/home';
+
+    public const LIMITER_AUTH_LOGIN = 'v6-auth-login';
+
+    public const LIMITER_AUTH_OTP_SEND = 'v6-auth-otp-send';
+
+    public const LIMITER_AUTH_OTP_VERIFY = 'v6-auth-otp-verify';
+
+    public const LIMITER_AUTH_WRITE = 'v6-auth-write';
+
+    public const LIMITER_MAP_API = 'v6-map-api';
+
+    public const LIMITER_ASSISTANT_REQUEST = 'assistant-request';
+
+    public const LIMITER_ASSISTANT_MESSAGE = 'assistant-message';
+
+    public const LIMITER_ASSISTANT_SESSION_WRITE = 'assistant-session-write';
+
+    public const LIMITER_ASSISTANT_IMAGE_UPLOAD = 'assistant-image-upload';
+
+    public const ASSISTANT_LIMITERS = [
+        self::LIMITER_ASSISTANT_REQUEST,
+        self::LIMITER_ASSISTANT_MESSAGE,
+        self::LIMITER_ASSISTANT_SESSION_WRITE,
+        self::LIMITER_ASSISTANT_IMAGE_UPLOAD,
+    ];
+
+    private const GLOBAL_REQUESTS_PER_MINUTE = 3000;
+
+    private const LOGIN_ATTEMPTS_PER_IDENTITY = 5;
+
+    private const LOGIN_ATTEMPTS_PER_IP = 20;
+
+    private const OTP_SENDS_PER_IDENTITY_MINUTE = 2;
+
+    private const OTP_SENDS_PER_IDENTITY_HOUR = 15;
+
+    private const OTP_SENDS_PER_IP_HOUR = 60;
+
+    private const OTP_VERIFICATIONS_PER_IDENTITY = 8;
+
+    private const OTP_VERIFICATIONS_PER_IP = 40;
+
+    private const AUTH_WRITES_PER_IP = 15;
+
+    private const MAP_REQUESTS_PER_IP = 60;
+
+    private const ASSISTANT_REQUESTS_PER_SHOPPER = 60;
+
+    private const ASSISTANT_MESSAGES_PER_SHOPPER = 20;
+
+    private const ASSISTANT_SESSION_WRITES_PER_SHOPPER = 30;
+
+    private const ASSISTANT_IMAGE_UPLOADS_PER_SHOPPER = 15;
+
+    private const ASSISTANT_IP_CEILING_MULTIPLIER = 5;
+
+    public function boot()
+    {
+        parent::boot();
+        $this->configureRateLimiting();
+    }
+
+    public function map()
+    {
+        if ($this->isSoftwareUpdateUnfinished()) {
+            $this->mapUpdateRoutes();
+
+            return;
+        }
+
+        $registerHostRoutes = function () {
+            $this->mapAPIv6Routes();
+
+            $this->mapBetaAdminRoutes();
+            $this->mapBetaVendorRoutes();
+            $this->mapWebV6Routes();
+            $this->mapPaymentRoutes();
+        };
+
+        $hostDomain = config('app.host_domain');
+        if ($hostDomain) {
+            Route::domain($hostDomain)->group($registerHostRoutes);
+        } else {
+            $registerHostRoutes();
+        }
+    }
+
+    private function isSoftwareUpdateUnfinished(): bool
+    {
+        return function_exists('envFileValue')
+            && $this->app->make(SoftwareUpdateService::class)->isUpdateUnfinished(installedVersion: envFileValue('SOFTWARE_VERSION'));
+    }
+
+    protected function mapInstallRoutes(): void
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/install.php'));
+    }
+
+    protected function mapUpdateRoutes(): void
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/update.php'));
+    }
+
+    protected function mapAPIv6Routes(): void
+    {
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/rest_api/v6/api.php'));
+    }
+
+    protected function mapBetaAdminRoutes(): void
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin/routes.php'));
+    }
+
+    protected function mapBetaVendorRoutes(): void
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/vendor/routes.php'));
+    }
+
+    protected function mapWebV6Routes(): void
+    {
+        Route::middleware(['web', 'logUserBrowsingNavigation'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web/v6/routes.php'));
+    }
+
+    protected function mapPaymentRoutes(): void
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/payment/routes.php'));
+    }
+
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('global', function (Request $request) {
+            return Limit::perMinute(self::GLOBAL_REQUESTS_PER_MINUTE);
+        });
+
+        RateLimiter::for(self::LIMITER_AUTH_LOGIN, function (Request $request) {
+            return [
+                Limit::perMinute(self::LOGIN_ATTEMPTS_PER_IDENTITY)->by($this->authIdentity($request)),
+                Limit::perMinute(self::LOGIN_ATTEMPTS_PER_IP)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for(self::LIMITER_AUTH_OTP_SEND, function (Request $request) {
+            return [
+                Limit::perMinute(self::OTP_SENDS_PER_IDENTITY_MINUTE)->by($this->authIdentity($request)),
+                Limit::perHour(self::OTP_SENDS_PER_IDENTITY_HOUR)->by($this->authIdentity($request)),
+                Limit::perHour(self::OTP_SENDS_PER_IP_HOUR)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for(self::LIMITER_AUTH_OTP_VERIFY, function (Request $request) {
+            return [
+                Limit::perMinute(self::OTP_VERIFICATIONS_PER_IDENTITY)->by($this->authIdentity($request)),
+                Limit::perMinute(self::OTP_VERIFICATIONS_PER_IP)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for(self::LIMITER_AUTH_WRITE, function (Request $request) {
+            return Limit::perMinute(self::AUTH_WRITES_PER_IP)->by($request->ip());
+        });
+
+        RateLimiter::for(self::LIMITER_MAP_API, function (Request $request) {
+            return Limit::perMinute(self::MAP_REQUESTS_PER_IP)->by($request->ip());
+        });
+
+        $assistantAllowances = [
+            self::LIMITER_ASSISTANT_REQUEST => self::ASSISTANT_REQUESTS_PER_SHOPPER,
+            self::LIMITER_ASSISTANT_MESSAGE => self::ASSISTANT_MESSAGES_PER_SHOPPER,
+            self::LIMITER_ASSISTANT_SESSION_WRITE => self::ASSISTANT_SESSION_WRITES_PER_SHOPPER,
+            self::LIMITER_ASSISTANT_IMAGE_UPLOAD => self::ASSISTANT_IMAGE_UPLOADS_PER_SHOPPER,
+        ];
+
+        foreach ($assistantAllowances as $limiter => $perShopper) {
+            RateLimiter::for($limiter, function (Request $request) use ($perShopper) {
+                return [
+                    Limit::perMinute($perShopper)->by($this->assistantShopperIdentity($request)),
+                    Limit::perMinute($perShopper * self::ASSISTANT_IP_CEILING_MULTIPLIER)->by('ip:'.$request->ip()),
+                ];
+            });
+        }
+    }
+
+    private function assistantShopperIdentity(Request $request): string
+    {
+        $customerId = auth('customer')->id();
+
+        if ($customerId !== null) {
+            return 'customer:'.$customerId;
+        }
+
+        $bearerToken = $request->bearerToken();
+
+        if ($bearerToken !== null && $bearerToken !== '') {
+            return 'token:'.sha1($bearerToken);
+        }
+
+        $guestId = $request->cookie('guest_id') ?? $request->input('guest_id');
+
+        if ($request->hasSession()) {
+            $guestId ??= $request->session()->get('guest_id');
+        }
+
+        return is_scalar($guestId) && (string) $guestId !== ''
+            ? 'guest:'.$guestId
+            : 'anonymous:'.$request->ip();
+    }
+
+    private function authIdentity(Request $request): string
+    {
+        $identity = $request->input('email_or_phone')
+            ?? $request->input('identity')
+            ?? $request->input('email')
+            ?? $request->input('phone');
+
+        return is_string($identity) && $identity !== ''
+            ? hash('sha256', $identity)
+            : (string) $request->ip();
+    }
+}

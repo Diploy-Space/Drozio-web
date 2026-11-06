@@ -1,0 +1,178 @@
+/* =====================================================================
+   6valley — Modern toast styling for the admin & vendor panels.
+   Loaded AFTER laravel-toaster-magic.min.css to refine the "default"
+   theme into a clean, professional notification card that matches the
+   customer storefront toasts (shared semantic palette + card language).
+   ===================================================================== */
+
+:root {
+    --toast-magic-success: #12b76a;
+    --toast-magic-success-rgb: 18, 183, 106;
+    --toast-magic-danger: #f04438;
+    --toast-magic-danger-rgb: 240, 68, 56;
+    --toast-magic-warning: #f79009;
+    --toast-magic-warning-rgb: 247, 144, 9;
+    --toast-magic-info: #2e90fa;
+    --toast-magic-info-rgb: 46, 144, 250;
+
+    --tm-card-bg: #ffffff;
+    --tm-title-color: #101828;
+    --tm-text-color: #475467;
+    --tm-border-color: rgba(16, 24, 40, 0.08);
+    --tm-shadow: 0 12px 28px -8px rgba(16, 24, 40, 0.18), 0 4px 10px -6px rgba(16, 24, 40, 0.10);
+    --tm-close-color: #98a2b3;
+    --tm-close-hover-bg: rgba(16, 24, 40, 0.06);
+}
+
+body[theme="dark"],
+[data-bs-theme="dark"] {
+    --tm-card-bg: #1d2939;
+    --tm-title-color: #f9fafb;
+    --tm-text-color: #cbd5e1;
+    --tm-border-color: rgba(255, 255, 255, 0.08);
+    --tm-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.55), 0 4px 10px -6px rgba(0, 0, 0, 0.4);
+    --tm-close-color: #94a3b8;
+    --tm-close-hover-bg: rgba(255, 255, 255, 0.08);
+}
+
+.toast-container {
+    gap: 0.75rem;
+}
+
+/* --- Card --- */
+.toast-container .toast-item {
+    --tm-toast-max-width: 400px;
+    min-width: 340px;
+    padding: 0.9rem 1rem !important;
+    border-radius: 14px;
+    border: 1px solid var(--tm-border-color);
+    background-color: var(--tm-card-bg);
+    color: var(--tm-title-color);
+    box-shadow: var(--tm-shadow);
+    transition: transform 0.45s cubic-bezier(0.21, 1.02, 0.73, 1), opacity 0.4s ease-in-out;
+}
+
+.toast-container .toast-item-content-center {
+    align-items: flex-start;
+    gap: 0.75rem !important;
+}
+
+.toast-container .toast-item-content-center .toast-body {
+    gap: 0.75rem !important;
+    align-items: flex-start;
+}
+
+/* --- Soft-tint icon badge --- */
+.toast-container .toast-body-icon-container {
+    inline-size: 40px !important;
+    block-size: 40px !important;
+    min-width: 40px;
+    padding: 0 !important;
+    border-radius: 11px !important;
+}
+
+.toast-container .toast-body-icon-container svg {
+    width: 22px !important;
+    height: 22px !important;
+}
+
+.toast-item.toast-success .toast-body-icon-container {
+    background-color: rgba(var(--toast-magic-success-rgb), 0.12);
+}
+
+.toast-item.toast-danger .toast-body-icon-container {
+    background-color: rgba(var(--toast-magic-danger-rgb), 0.12);
+}
+
+.toast-item.toast-warning .toast-body-icon-container {
+    background-color: rgba(var(--toast-magic-warning-rgb), 0.12);
+}
+
+.toast-item.toast-info .toast-body-icon-container {
+    background-color: rgba(var(--toast-magic-info-rgb), 0.12);
+}
+
+/* --- Typography --- */
+.toast-container .toast-item-content-center .toast-body-title {
+    min-height: auto;
+    margin-bottom: 2px;
+}
+
+.toast-container .toast-item-content-center .toast-body h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--tm-title-color);
+}
+
+.toast-container .toast-item-content-center .toast-body p {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--tm-text-color);
+}
+
+/* Vertically center the message when a toast has no heading */
+.toast-container .toast-body .toast-body-container {
+    justify-content: center;
+}
+
+/* --- Close button --- */
+.toast-container .toast-close-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    color: var(--tm-close-color);
+    opacity: 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.toast-container .toast-close-btn:hover {
+    background-color: var(--tm-close-hover-bg);
+    color: var(--tm-title-color);
+}
+
+/* --- Progress bar: soft track + gradient fill, synced to the 5s timeout --- */
+.toast-container .toast-item::before,
+.toast-container .toast-item::after {
+    height: 3px;
+    animation-duration: 5s !important;
+}
+
+.toast-container .toast-item::after {
+    border-bottom-right-radius: 3px;
+}
+
+.toast-item.toast-success::before {
+    background-color: rgba(var(--toast-magic-success-rgb), 0.18);
+}
+.toast-item.toast-success::after {
+    background: linear-gradient(90deg, rgba(var(--toast-magic-success-rgb), 0.55), var(--toast-magic-success));
+}
+.toast-item.toast-danger::before {
+    background-color: rgba(var(--toast-magic-danger-rgb), 0.18);
+}
+.toast-item.toast-danger::after {
+    background: linear-gradient(90deg, rgba(var(--toast-magic-danger-rgb), 0.55), var(--toast-magic-danger));
+}
+.toast-item.toast-warning::before {
+    background-color: rgba(var(--toast-magic-warning-rgb), 0.18);
+}
+.toast-item.toast-warning::after {
+    background: linear-gradient(90deg, rgba(var(--toast-magic-warning-rgb), 0.55), var(--toast-magic-warning));
+}
+.toast-item.toast-info::before {
+    background-color: rgba(var(--toast-magic-info-rgb), 0.18);
+}
+.toast-item.toast-info::after {
+    background: linear-gradient(90deg, rgba(var(--toast-magic-info-rgb), 0.55), var(--toast-magic-info));
+}
+
+@media (max-width: 575px) {
+    .toast-container .toast-item {
+        min-width: 0;
+    }
+}

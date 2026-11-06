@@ -1,0 +1,41 @@
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}
+
+#page-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: var(--base, var(--bs-primary, #1450a3));
+    box-shadow: 0 0 8px rgba(var(--bs-base-rgb, var(--bs-primary-rgb, 20, 80, 163)), 0.5);
+    z-index: 2147483647;
+    opacity: 0;
+    pointer-events: none;
+    transition: width 8s cubic-bezier(0.1, 0.7, 0.3, 1), opacity 200ms ease;
+}
+
+#page-progress-bar.active {
+    opacity: 1;
+    width: 92%;
+}
+
+#page-progress-bar.done {
+    width: 100%;
+    opacity: 0;
+    transition: width 200ms ease, opacity 300ms ease 150ms;
+}
