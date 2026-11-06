@@ -10,7 +10,6 @@ use App\Http\Requests\Admin\Vendor\Registration\SellWithUsSectionUpdateRequest;
 use App\Services\New\BusinessSettingService;
 use App\Services\New\HelpTopicService;
 use App\Services\New\VendorRegistrationReasonService;
-use AWS\CRT\Log;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
