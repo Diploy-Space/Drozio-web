@@ -25,6 +25,8 @@ class RouteServiceProvider extends ServiceProvider
 
     public const LIMITER_MAP_API = 'v6-map-api';
 
+    public const LIMITER_PUBLIC_WRITE = 'v6-public-write';
+
     public const LIMITER_ASSISTANT_REQUEST = 'assistant-request';
 
     public const LIMITER_ASSISTANT_MESSAGE = 'assistant-message';
@@ -59,6 +61,10 @@ class RouteServiceProvider extends ServiceProvider
     private const AUTH_WRITES_PER_IP = 15;
 
     private const MAP_REQUESTS_PER_IP = 60;
+
+    private const PUBLIC_WRITES_PER_IP_MINUTE = 60;
+
+    private const PUBLIC_WRITES_PER_IP_HOUR = 600;
 
     private const ASSISTANT_REQUESTS_PER_SHOPPER = 60;
 
@@ -191,6 +197,13 @@ class RouteServiceProvider extends ServiceProvider
 
         RateLimiter::for(self::LIMITER_MAP_API, function (Request $request) {
             return Limit::perMinute(self::MAP_REQUESTS_PER_IP)->by($request->ip());
+        });
+
+        RateLimiter::for(self::LIMITER_PUBLIC_WRITE, function (Request $request) {
+            return [
+                Limit::perMinute(self::PUBLIC_WRITES_PER_IP_MINUTE)->by($request->ip()),
+                Limit::perHour(self::PUBLIC_WRITES_PER_IP_HOUR)->by($request->ip()),
+            ];
         });
 
         $assistantAllowances = [

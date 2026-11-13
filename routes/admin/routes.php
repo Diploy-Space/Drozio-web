@@ -108,6 +108,7 @@ use App\Http\Controllers\Admin\Vendor\VendorController;
 use App\Http\Controllers\Admin\Vendor\VerificationController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\SharedController;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(SharedController::class)->group(function () {
@@ -120,7 +121,9 @@ Route::controller(SharedController::class)->group(function () {
 });
 
 Route::controller(FirebaseController::class)->group(function () {
-    Route::post('system/subscribe-to-topic', 'subscribeToTopic')->name('system.subscribe-to-topic');
+    Route::post('system/subscribe-to-topic', 'subscribeToTopic')
+        ->name('system.subscribe-to-topic')
+        ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE);
 });
 
 Route::group(['prefix' => 'login'], function () {

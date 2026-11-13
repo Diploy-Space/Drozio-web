@@ -141,22 +141,26 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::post('contact-us', [ContactController::class, 'store']);
-Route::get('get-guest-id', [GuestController::class, 'create']);
+Route::get('get-guest-id', [GuestController::class, 'create'])
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE);
 
 Route::prefix('customer')->group(function () {
-    Route::put('device-token', [AccountController::class, 'updateDeviceToken']);
+    Route::put('device-token', [AccountController::class, 'updateDeviceToken'])
+        ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE);
 
     Route::controller(DeliveryRestrictionController::class)->prefix('delivery-restrictions')->group(function () {
         Route::get('countries', 'getCountries');
         Route::get('zip-codes', 'getZipCodes');
     });
 
-    Route::controller(AddressController::class)->prefix('addresses')->group(function () {
-        Route::get('/', 'getList');
-        Route::post('/', 'create');
-        Route::put('{id}', 'update');
-        Route::delete('{id}', 'delete');
-    });
+    Route::controller(AddressController::class)->prefix('addresses')
+        ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+        ->group(function () {
+            Route::get('/', 'getList');
+            Route::post('/', 'create');
+            Route::put('{id}', 'update');
+            Route::delete('{id}', 'delete');
+        });
 });
 
 Route::prefix('customer')->middleware('auth:api')->group(function () {
@@ -193,16 +197,18 @@ Route::prefix('customer')->middleware('auth:api')->group(function () {
     });
 });
 
-Route::controller(CartController::class)->prefix('customer/cart')->group(function () {
-    Route::get('/', 'getList');
-    Route::delete('/', 'clear');
-    Route::post('items', 'addItem');
-    Route::put('items/{id}', 'updateItem')->whereNumber('id');
-    Route::delete('items/{id}', 'deleteItem')->whereNumber('id');
-    Route::put('selection', 'updateSelection');
-    Route::post('merge-guest', 'mergeGuestCart')->middleware('auth:api');
-    Route::get('referral-discount', 'getReferralDiscount')->middleware('auth:api');
-});
+Route::controller(CartController::class)->prefix('customer/cart')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::get('/', 'getList');
+        Route::delete('/', 'clear');
+        Route::post('items', 'addItem');
+        Route::put('items/{id}', 'updateItem')->whereNumber('id');
+        Route::delete('items/{id}', 'deleteItem')->whereNumber('id');
+        Route::put('selection', 'updateSelection');
+        Route::post('merge-guest', 'mergeGuestCart')->middleware('auth:api');
+        Route::get('referral-discount', 'getReferralDiscount')->middleware('auth:api');
+    });
 
 Route::controller(RestockRequestController::class)->prefix('customer/restock-requests')->group(function () {
     Route::get('/', 'getList')->middleware('auth:api');
@@ -230,23 +236,29 @@ Route::controller(OrderPlacementController::class)->prefix('customer')->group(fu
     Route::get('offline-payment-methods', 'getOfflinePaymentMethods');
 });
 
-Route::controller(OrderController::class)->prefix('customer/orders')->group(function () {
-    Route::get('/', 'getList')->middleware('auth:api');
-    Route::get('{id}', 'find')->whereNumber('id');
-    Route::get('{id}/items', 'getItems')->whereNumber('id');
-    Route::get('{id}/invoice', 'getInvoice')->whereNumber('id');
-});
+Route::controller(OrderController::class)->prefix('customer/orders')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::get('/', 'getList')->middleware('auth:api');
+        Route::get('{id}', 'find')->whereNumber('id');
+        Route::get('{id}/items', 'getItems')->whereNumber('id');
+        Route::get('{id}/invoice', 'getInvoice')->whereNumber('id');
+    });
 
-Route::controller(OrderActionController::class)->prefix('customer/orders')->group(function () {
-    Route::put('{id}/cancel', 'cancel')->whereNumber('id');
-    Route::post('{id}/reorder', 'reorder')->whereNumber('id')->middleware('auth:api');
-});
+Route::controller(OrderActionController::class)->prefix('customer/orders')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::put('{id}/cancel', 'cancel')->whereNumber('id');
+        Route::post('{id}/reorder', 'reorder')->whereNumber('id')->middleware('auth:api');
+    });
 
-Route::controller(OrderTrackingController::class)->prefix('orders')->group(function () {
-    Route::post('track', 'track');
-    Route::get('{id}/tracking', 'getTracking')->whereNumber('id');
-    Route::get('{id}/status-history', 'getStatusHistory')->whereNumber('id');
-});
+Route::controller(OrderTrackingController::class)->prefix('orders')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::post('track', 'track');
+        Route::get('{id}/tracking', 'getTracking')->whereNumber('id');
+        Route::get('{id}/status-history', 'getStatusHistory')->whereNumber('id');
+    });
 
 Route::controller(RefundController::class)->prefix('customer/refunds')->middleware('auth:api')->group(function () {
     Route::get('eligibility/{orderDetailId}', 'getEligibility')->whereNumber('orderDetailId');
@@ -254,19 +266,25 @@ Route::controller(RefundController::class)->prefix('customer/refunds')->middlewa
     Route::get('{orderDetailId}', 'find')->whereNumber('orderDetailId');
 });
 
-Route::controller(DigitalProductDownloadController::class)->prefix('customer/order-items')->group(function () {
-    Route::get('{orderDetailId}/download', 'download')->whereNumber('orderDetailId');
-    Route::post('{orderDetailId}/download/otp', 'sendOtp')->whereNumber('orderDetailId');
-    Route::post('{orderDetailId}/download/verify', 'verifyOtp')->whereNumber('orderDetailId');
-});
+Route::controller(DigitalProductDownloadController::class)->prefix('customer/order-items')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::get('{orderDetailId}/download', 'download')->whereNumber('orderDetailId');
+        Route::post('{orderDetailId}/download/otp', 'sendOtp')->whereNumber('orderDetailId')
+            ->middleware('throttle:'.RouteServiceProvider::LIMITER_AUTH_OTP_SEND);
+        Route::post('{orderDetailId}/download/verify', 'verifyOtp')->whereNumber('orderDetailId')
+            ->middleware('throttle:'.RouteServiceProvider::LIMITER_AUTH_OTP_VERIFY);
+    });
 
-Route::controller(OrderPaymentController::class)->prefix('customer')->group(function () {
-    Route::post('orders/{id}/due-payments/wallet', 'payDueByWallet')->whereNumber('id');
-    Route::post('orders/{id}/due-payments/cash-on-delivery', 'payDueByCashOnDelivery')->whereNumber('id');
-    Route::post('orders/{id}/due-payments/offline-payment', 'payDueByOfflinePayment')->whereNumber('id');
-    Route::post('orders/{id}/due-payments/digital-payment', 'payDueByDigitalPayment')->whereNumber('id');
-    Route::post('payments/digital', 'createDigitalPayment');
-});
+Route::controller(OrderPaymentController::class)->prefix('customer')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::post('orders/{id}/due-payments/wallet', 'payDueByWallet')->whereNumber('id');
+        Route::post('orders/{id}/due-payments/cash-on-delivery', 'payDueByCashOnDelivery')->whereNumber('id');
+        Route::post('orders/{id}/due-payments/offline-payment', 'payDueByOfflinePayment')->whereNumber('id');
+        Route::post('orders/{id}/due-payments/digital-payment', 'payDueByDigitalPayment')->whereNumber('id');
+        Route::post('payments/digital', 'createDigitalPayment');
+    });
 
 Route::controller(WishlistController::class)->prefix('customer/wishlist')->middleware('auth:api')->group(function () {
     Route::get('/', 'getList');
@@ -293,11 +311,13 @@ Route::controller(ProductReviewController::class)->group(function () {
     });
 });
 
-Route::controller(DeliverymanReviewController::class)->prefix('customer/orders')->group(function () {
-    Route::get('{orderId}/deliveryman-review', 'find')->whereNumber('orderId');
-    Route::post('{orderId}/deliveryman-review', 'create')->whereNumber('orderId')->middleware('auth:api');
-    Route::put('{orderId}/deliveryman-review', 'update')->whereNumber('orderId');
-});
+Route::controller(DeliverymanReviewController::class)->prefix('customer/orders')
+    ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE)
+    ->group(function () {
+        Route::get('{orderId}/deliveryman-review', 'find')->whereNumber('orderId');
+        Route::post('{orderId}/deliveryman-review', 'create')->whereNumber('orderId')->middleware('auth:api');
+        Route::put('{orderId}/deliveryman-review', 'update')->whereNumber('orderId');
+    });
 
 Route::prefix('products')->controller(ProductSectionController::class)->group(function () {
     Route::get('latest', 'getLatest');

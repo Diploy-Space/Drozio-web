@@ -13,10 +13,10 @@ class DeliveryManAuth
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $token = explode(' ', $request->header('authorization'));
+        $token = explode(' ', (string) $request->header('authorization'));
         if (count($token) > 1 && strlen($token[1]) > 30) {
-            $d_man = DeliveryMan::where(['auth_token' => $token['1']])->first();
-            if (isset($d_man)) {
+            $d_man = DeliveryMan::where(['auth_token' => $token[1]])->first();
+            if (isset($d_man) && (int) $d_man->is_active === 1) {
                 $request['delivery_man'] = $d_man;
 
                 return $next($request);

@@ -15,8 +15,6 @@ class ModulePermissionMiddleware
             if (Helpers::module_permission_check(...$modules)) {
                 return $next($request);
             }
-        } elseif (auth('seller')->check()) {
-            return $next($request);
         }
 
         if (! auth('admin')->check()) {

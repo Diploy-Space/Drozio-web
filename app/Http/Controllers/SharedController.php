@@ -11,7 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 
 class SharedController extends Controller
@@ -42,7 +41,6 @@ class SharedController extends Controller
         Helpers::language_load();
         session()->put('local', $request['language_code']);
         Session::put('direction', $direction);
-        Artisan::call('cache:clear');
 
         return response()->json(['message' => translate(':item changed successfully', ['item' => translate('Language')]).'.']);
     }

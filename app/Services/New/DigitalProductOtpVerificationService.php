@@ -14,6 +14,8 @@ class DigitalProductOtpVerificationService extends BaseService
 {
     private const RESEND_TIME_SETTING = 'otp_resend_time';
 
+    private const TOKEN_TTL_MINUTES = 10;
+
     public function __construct(DigitalProductOtpVerification $digitalProductOtpVerification)
     {
         parent::__construct($digitalProductOtpVerification);
@@ -61,6 +63,16 @@ class DigitalProductOtpVerificationService extends BaseService
         return $this->query()
             ->where('order_details_id', $orderDetailId)
             ->where(fn (Builder $inner) => $inner->where('identity', $email)->orWhere('identity', $phone))
+            ->latest()
+            ->first();
+    }
+
+    public function findValidToken(int|string $orderDetailId, int|string $token): ?Model
+    {
+        return $this->query()
+            ->where('order_details_id', $orderDetailId)
+            ->where('token', $token)
+            ->where('created_at', '>=', now()->subMinutes(self::TOKEN_TTL_MINUTES))
             ->latest()
             ->first();
     }

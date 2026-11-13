@@ -94,7 +94,8 @@ class PaypalPaymentController extends Controller
                 'intent' => 'CAPTURE',
                 'purchase_units' => [
                     [
-                        'reference_id' => $data->id,
+                        'reference_id' => (string) $data->id,
+                        'custom_id' => (string) $data->id,
                         'amount' => [
                             'currency_code' => $data->currency_code ?? 'USD',
                             'value' => number_format($data->payment_amount, 2, '.', '')
@@ -156,8 +157,26 @@ class PaypalPaymentController extends Controller
      */
     public function success(Request $request): Application|JsonResponse|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
+        $validator = Validator::make($request->all(), [
+            'payment_id' => 'required|uuid',
+            'token' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_400, null, $this->error_processor($validator)), 400);
+        }
+
+        $data = $this->payment::where(['id' => $request['payment_id']])->where(['is_paid' => 0])->first();
+        if (!isset($data)) {
+            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
+        }
 
         $accessToken = json_decode($this->token(), true);
+
+        if (!isset($accessToken['access_token'])) {
+            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
+        }
+
         $accessToken = $accessToken['access_token'];
 
         $ch = curl_init();
@@ -180,8 +199,8 @@ class PaypalPaymentController extends Controller
 
         $response = json_decode($result);
 
-        if ($response->status === 'COMPLETED') {
-            $this->payment::where(['id' => $request['payment_id']])->update([
+        if (($response->status ?? null) === 'COMPLETED' && $this->captureMatchesPayment($response, $data)) {
+            $this->payment::where(['id' => $request['payment_id'], 'is_paid' => 0])->update([
                 'payment_method' => 'paypal',
                 'is_paid' => 1,
                 'transaction_id' => $response->id,
@@ -200,5 +219,43 @@ class PaypalPaymentController extends Controller
             call_user_func($payment_data->failure_hook, $payment_data);
         }
         return $this->payment_response($payment_data, 'fail');
+    }
+
+    /**
+     * The captured PayPal order must reference this payment request, and the money
+     * actually captured must match the request amount and currency.
+     */
+    private function captureMatchesPayment(object $response, $data): bool
+    {
+        $purchaseUnit = $response->purchase_units[0] ?? null;
+
+        if ($purchaseUnit === null) {
+            return false;
+        }
+
+        $reference = $purchaseUnit->reference_id ?? $purchaseUnit->custom_id ?? null;
+
+        if ((string) $reference !== (string) $data->id) {
+            return false;
+        }
+
+        $capture = $purchaseUnit->payments->captures[0] ?? null;
+
+        if ($capture === null) {
+            return false;
+        }
+
+        $capturedValue = $capture->amount->value ?? null;
+        $capturedCurrency = $capture->amount->currency_code ?? null;
+
+        if ($capturedValue !== null && abs((float) $capturedValue - (float) $data->payment_amount) > 0.01) {
+            return false;
+        }
+
+        $expectedCurrency = strtoupper((string) ($data->currency_code ?? ''));
+
+        return $capturedCurrency === null
+            || $expectedCurrency === ''
+            || strtoupper((string) $capturedCurrency) === $expectedCurrency;
     }
 }
