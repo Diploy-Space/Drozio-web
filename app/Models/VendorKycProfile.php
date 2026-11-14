@@ -51,7 +51,7 @@ class VendorKycProfile extends Model
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(VendorKycReview::class, 'vendor_kyc_profile_id')->latest();
+        return $this->hasMany(VendorKycReview::class, 'vendor_kyc_profile_id')->latest('id');
     }
 
     public function isEditableByVendor(): bool
