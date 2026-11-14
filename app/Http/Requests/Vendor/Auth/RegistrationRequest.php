@@ -20,6 +20,8 @@ class RegistrationRequest extends BaseRequest
      */
     public function rules(): array
     {
+        $isGst = $this->input('registration_type') === 'gst';
+
         return [
             'f_name' => 'required',
             'l_name' => 'required',
@@ -35,6 +37,33 @@ class RegistrationRequest extends BaseRequest
             'tax_identification_number' => 'nullable|string',
             'tin_expire_date' => 'nullable|date|after_or_equal:today',
             'tin_certificate' => 'nullable|mimes:pdf,doc,docx,jpg|max:5120',
+
+            // KYC fields
+            'business_type' => 'required|string|max:50',
+            'legal_name' => 'required|string|max:255',
+            'trade_name' => 'required|string|max:255',
+            'registration_type' => 'required|in:gst,non_gst',
+            'gst_number' => [$isGst ? 'required' : 'nullable', 'string', 'max:50'],
+            'pan_number' => 'required|string|max:20',
+            'pan_holder_name' => 'required|string|max:255',
+            'business_address_line1' => 'required|string|max:255',
+            'business_address_line2' => 'nullable|string|max:255',
+            'business_city' => 'required|string|max:100',
+            'business_state' => 'required|string|max:100',
+            'business_pincode' => 'required|string|max:20',
+            'business_country' => 'required|string|max:100',
+            'bank_account_name' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'bank_branch' => 'required|string|max:255',
+            'bank_account_no' => 'required|string|max:50',
+            'bank_ifsc' => 'required|string|max:30',
+
+            // KYC documents
+            'kyc_pan_card' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'kyc_gst_certificate' => [$isGst ? 'required' : 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf,doc,docx', 'max:5120'],
+            'kyc_address_proof' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'kyc_bank_proof' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'kyc_business_registration' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
         ];
     }
 
@@ -63,6 +92,34 @@ class RegistrationRequest extends BaseRequest
             'tin_expire_date.after_or_equal' => translate('The tin expiry date must be a future date'),
             'tin_certificate.mimes' => translate('TIN certificate must be a pdf, doc, docx or jpg.'),
             'tin_certificate.max' => translate('The tin certificate must not exceed 5MB'),
+
+            'business_type.required' => translate('Business type is required'),
+            'legal_name.required' => translate('Legal name is required'),
+            'trade_name.required' => translate('Trade name is required'),
+            'registration_type.required' => translate('Registration type is required'),
+            'gst_number.required' => translate('GST number is required for GST registered businesses'),
+            'pan_number.required' => translate('PAN number is required'),
+            'pan_holder_name.required' => translate('PAN holder name is required'),
+            'business_address_line1.required' => translate('Business address is required'),
+            'business_city.required' => translate('City is required'),
+            'business_state.required' => translate('State is required'),
+            'business_pincode.required' => translate('PIN code is required'),
+            'business_country.required' => translate('Country is required'),
+            'bank_account_name.required' => translate('Bank account name is required'),
+            'bank_name.required' => translate('Bank name is required'),
+            'bank_branch.required' => translate('Bank branch is required'),
+            'bank_account_no.required' => translate('Bank account number is required'),
+            'bank_ifsc.required' => translate('IFSC is required'),
+            'kyc_pan_card.required' => translate('PAN card document is required'),
+            'kyc_gst_certificate.required' => translate('GST certificate is required for GST registered businesses'),
+            'kyc_address_proof.required' => translate('Address proof document is required'),
+            'kyc_bank_proof.required' => translate('Bank proof document is required'),
+            'kyc_business_registration.required' => translate('Business registration document is required'),
+            'kyc_pan_card.mimes' => translate('PAN card must be a valid document file'),
+            'kyc_gst_certificate.mimes' => translate('GST certificate must be a valid document file'),
+            'kyc_address_proof.mimes' => translate('Address proof must be a valid document file'),
+            'kyc_bank_proof.mimes' => translate('Bank proof must be a valid document file'),
+            'kyc_business_registration.mimes' => translate('Business registration document must be a valid file'),
         ];
     }
 
