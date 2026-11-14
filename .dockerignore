@@ -1,1 +1,5 @@
-.git
+# The image only needs the Docker build files: the application code is copied
+# into a Docker volume at runtime (see "Local Development with Docker" in
+# README.md), so sending the 220 MB checkout as build context is pointless.
+*
+!docker/

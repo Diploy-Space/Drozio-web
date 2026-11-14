@@ -1,0 +1,98 @@
+name: drozio-web
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: drozio-web-app:local
+    container_name: drozio-web-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html/public
+      COMPOSER_PROCESS_TIMEOUT: "1800"
+    volumes:
+      - app_code:/var/www/html
+      # Dependencies live in their own volumes so syncing source never
+      # overwrites them and Composer/NPM never write through a Windows path.
+      - vendor:/var/www/html/vendor
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/zz-drozio.ini:ro
+      - node_modules:/var/www/html/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - drozio
+
+  db:
+    image: mariadb:10.11
+    container_name: drozio-web-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: 6valley
+      MARIADB_USER: 6valley
+      MARIADB_PASSWORD: 6valley_secret
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --sql-mode=NO_ENGINE_SUBSTITUTION
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./installation/backup/database.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 30
+    networks:
+      - drozio
+
+  # Builds the Vite/Inertia assets into public/build.
+  # Run with: docker compose --profile tools run --rm node
+  node:
+    image: node:22-alpine
+    profiles: ["tools"]
+    working_dir: /var/www/html
+    volumes:
+      - app_code:/var/www/html
+      - node_modules:/var/www/html/node_modules
+    command: sh -c "npm install --no-audit --no-fund && npx vite build"
+
+  # Optional background worker: docker compose --profile worker up -d queue
+  queue:
+    image: drozio-web-app:local
+    profiles: ["worker"]
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - app_code:/var/www/html
+      - vendor:/var/www/html/vendor
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/zz-drozio.ini:ro
+    command: php -d memory_limit=512M artisan queue:work database --queue=exports,high,default,auctions,auction_notifications --tries=3 --timeout=900 --sleep=3
+    depends_on:
+      app:
+        condition: service_started
+      db:
+        condition: service_healthy
+    networks:
+      - drozio
+
+volumes:
+  app_code:
+  db_data:
+  vendor:
+  node_modules:
+
+networks:
+  drozio:
+    driver: bridge
+
