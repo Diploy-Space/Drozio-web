@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use App\Http\Controllers\Admin\AdvancedSearchController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 Route::group(['prefix' => 'v6', 'middleware' => ['api_lang']], function () {
 
