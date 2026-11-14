@@ -60,10 +60,6 @@ class VendorKycService extends BaseService
 
     public function updateProfile(VendorKycProfile $profile, array $data): VendorKycProfile
     {
-        if (! $profile->isEditableByVendor()) {
-            // allow safe updates only in editable states; caller should validate
-        }
-
         $fields = Arr::only($data, [
             'business_type','legal_name','trade_name','registration_type','gst_number',
             'pan_number','pan_holder_name',
@@ -71,7 +67,6 @@ class VendorKycService extends BaseService
             'bank_account_name','bank_name','bank_branch','bank_account_no','bank_ifsc',
         ]);
 
-        // normalize registration type
         if (isset($fields['registration_type'])) {
             $fields['registration_type'] = in_array($fields['registration_type'], [VendorKycProfile::REG_GST, VendorKycProfile::REG_NON_GST], true)
                 ? $fields['registration_type']
@@ -82,12 +77,6 @@ class VendorKycService extends BaseService
         }
 
         $profile->fill($fields);
-
-        // moving out of correction/rejected to draft on edit keeps it clear; if approved keep approved? shouldn't edit
-        if (in_array($profile->status, [VendorKycProfile::STATUS_REJECTED, VendorKycProfile::STATUS_CORRECTION_REQUESTED], true)) {
-            // keep status until resubmit, but data updated
-        }
-
         $profile->save();
 
         return $profile->fresh(['documents', 'shop', 'seller']);
@@ -125,11 +114,6 @@ class VendorKycService extends BaseService
 
     public function uploadDocument(VendorKycProfile $profile, string $documentType, UploadedFile $file): VendorKycDocument
     {
-        $allowed = array_column($this->requirements($profile)['documents'], 'type');
-        if (! in_array($documentType, $allowed, true)) {
-            // allow known extras too
-        }
-
         return DB::transaction(function () use ($profile, $documentType, $file) {
             $existing = VendorKycDocument::query()
                 ->where('vendor_kyc_profile_id', $profile->id)
@@ -164,7 +148,7 @@ class VendorKycService extends BaseService
     public function statusPayload(VendorKycProfile $profile): array
     {
         $profile->loadMissing(['documents', 'reviews']);
-        $latestReview = $profile->reviews->first();
+        $latestReview = $profile->reviews()->latest()->first();
         return [
             'profile_status' => $profile->status,
             'is_verified' => $profile->status === VendorKycProfile::STATUS_APPROVED,
@@ -217,7 +201,6 @@ class VendorKycService extends BaseService
                 'rejection_reason' => null,
                 'correction_note' => null,
             ]);
-            // reset doc statuses to pending on resubmit? keep as-is; admin will review
             $this->logReview($profile, $action, $actorType, $actorId, $from, $to, null);
         });
 
@@ -297,9 +280,6 @@ class VendorKycService extends BaseService
 
             if ($action === 'approve') {
                 $this->syncOnApprove($profile, $adminId);
-            } elseif (in_array($action, ['reject','request_correction'], true)) {
-                // optionally unverify seller on reject/correction if desired; keep conservative
-                // $profile->seller?->update(['is_verified' => 0]);
             }
         });
 
@@ -312,15 +292,17 @@ class VendorKycService extends BaseService
         $shop = $profile->shop_id ? Shop::query()->find($profile->shop_id) : ($seller ? Shop::query()->where('seller_id',$seller->id)->first() : null);
         if ($seller) {
             $seller->fill(array_filter([
-                'is_verified' => 1,
-                'verified_at' => now(),
-                'verified_by' => $adminId,
                 'gst' => $profile->gst_number ?: $seller->gst,
                 'bank_name' => $profile->bank_name ?: $seller->bank_name,
                 'branch' => $profile->bank_branch ?: $seller->branch,
                 'account_no' => $profile->bank_account_no ?: $seller->account_no,
                 'holder_name' => $profile->bank_account_name ?: $seller->holder_name,
-            ], fn($v) => $v !== null))->save();
+            ], fn($v) => $v !== null && $v !== ''));
+            $seller->forceFill([
+                'is_verified' => 1,
+                'verified_at' => now(),
+                'verified_by' => $adminId,
+            ])->save();
         }
         if ($shop) {
             $shopUpdates = [];
