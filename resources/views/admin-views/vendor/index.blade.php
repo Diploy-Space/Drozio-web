@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Str; @endphp
+﻿@php use Illuminate\Support\Str; @endphp
 @extends('layouts.admin.app')
 
 @section('title', translate('Vendor List'))
@@ -12,6 +12,7 @@
                 <span class="badge badge-info text-bg-info">{{ $vendors->total() }}</span>
             </h2>
             @include('admin-views.vendor.partials._verification-recommendation')
+            <a href="{{ route('admin.people.vendors.kyc.list') }}" class="btn btn-outline-info">{{ translate('KYC Management') }}</a>
         </div>
 
         <div class="card">
@@ -243,3 +244,4 @@
         <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/vendor-verification.js') }}"></script>
     @endif
 @endpush
+
