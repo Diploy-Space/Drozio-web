@@ -1,111 +1,231 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Drozio-web — Multi-Vendor eCommerce Platform
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="320" alt="Laravel 12 Framework">
 </p>
 
-## Deployment: Queues & Scheduler (required in production)
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.2%20--%208.5-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.5">
+  <img src="https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19">
+  <img src="https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 6">
+  <img src="https://img.shields.io/badge/Flutter%20SDK-3.47+-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter SDK">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
+</p>
 
-Blocking work — order/registration emails and FCM push notifications — runs on
-**queues**. For it to actually defer off the request thread, production needs a
-non-`sync` queue driver **and** a running worker:
+---
 
-1. **Queue driver.** In `.env`:
-   ```
-   QUEUE_CONNECTION=database
-   ```
-   - New installs already default to this (`.env.example`).
-   - Existing installs are switched from `sync` to `database` automatically during
-     the software update (only `sync`/empty is changed; any other configured driver is left as-is).
-   - After editing `.env`, run `php artisan config:clear` (and `config:cache` if you cache config).
-   - The `jobs` / `failed_jobs` tables are created by `php artisan migrate`.
+## 📖 Overview
 
-2. **Scheduler cron (one entry, drives the worker + cache warming).** On cPanel/shared
-   hosting add a single cron running every minute:
-   ```
-   * * * * * /usr/local/bin/ea-php82 /home/USERNAME/public_html/artisan schedule:run >> /dev/null 2>&1
-   ```
-   Use your PHP 8.2+ CLI path and project path. This runs the scheduled
-   `queue:work --queue=high,default,low --stop-when-empty` (drains and exits each
-   minute, priority: `high` → `default` → `low`) plus `cache:warm-home`.
+**Drozio-web** is an enterprise-grade multi-vendor eCommerce ecosystem engineered on **Laravel 12**, **Inertia.js + React 19**, and modern asynchronous queue architecture. It provides an all-in-one digital marketplace infrastructure connecting platform administrators, independent vendors/sellers, customers, and delivery personnel.
 
-**Local development** can keep `QUEUE_CONNECTION=sync` (jobs run inline, no worker
-needed). If you set `database` locally, run `php artisan queue:work --queue=high,default,low`
-in a terminal or queued mail/push will wait in the `jobs` table.
+The platform is fully decoupled and supports multi-theme web storefronts alongside dedicated cross-platform mobile apps for Android and iOS built with **Flutter 3.47+**.
 
-Check it: `SELECT count(*), queue FROM jobs GROUP BY queue;` (growing = worker not
-keeping up) and `php artisan queue:failed`. Queued work: notification listeners
-(email + FCM push) on named queues (`high`/`default`/`low`).
+---
 
-## About Laravel
+## ✨ Key Platform Features & Modules
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 🏢 1. Multi-Vendor Commerce Architecture
+- **Super Admin Dashboard:** Granular control over platform commissions, payouts, multi-currency exchange rates, and store verifications.
+- **Dedicated Vendor Panel:** Product management, wholesale pricing configuration, dynamic coupons, delivery management, and real-time sales analytics.
+- **Customer Storefront:** Fast, responsive multi-theme user interface (Default, Aster, and Fashion themes) powered by React 19 & Inertia.js.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 📦 2. Wholesale (B2B) Module
+- Tiered quantity-based pricing and minimum order quantities (MOQ).
+- Dedicated wholesale cart, quotation workflows, and bulk product management.
+- Multi-tier commission rules for wholesale vendors.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🔨 3. Auction & Real-Time Bidding
+- Scheduled product auctions with reserve pricing and automated bid incrementing.
+- Live countdowns, bid activity tracking, and fair winner auto-selection.
+- Integrated escrow settlement upon auction conclusion.
 
-## Learning Laravel
+### 🤖 4. AI Assistant Module
+- Integrated AI-driven catalog generation and smart product descriptions.
+- Customer AI chat sessions with token and rate-limit guardrails.
+- Intelligent search suggestions and semantic product discovery.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 🚚 5. Logistics & Courier Service
+- Integrated multi-provider courier configuration (Steadfast, Pathao, RedX, Paperfly, etc.).
+- Automated consignment booking, dispatch manifests, tracking supersede logic, and real-time status webhooks.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 💳 6. Payment & Tax Infrastructure
+- Multi-gateway support (Stripe, PayPal, SSLCommerz, Razorpay, Paystack, BKash, Nagad, etc.).
+- Flexible tax configurations: Inclusive/Exclusive taxation, multi-tier VAT, and vendor-wise tax reporting.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## 🛠️ System Requirements
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+Ensure your hosting environment meets the following specifications:
 
-## Contributing
+| Component | Minimum Required | Recommended |
+| :--- | :--- | :--- |
+| **PHP** | `^8.2` | `8.2.x` / `8.3.x` / `8.5.x` |
+| **Database** | MySQL `8.0+` or MariaDB `10.4+` | MySQL `8.0+` |
+| **Node.js** | `18.x` | `20.x LTS` (npm 9+) |
+| **Web Server** | Nginx / Apache 2.4 | Nginx with PHP-FPM |
+| **Composer** | `2.x` | `2.7+` |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Required PHP Extensions:
+`bcmath`, `curl`, `dom`, `fileinfo`, `gd`, `intl`, `json`, `libxml`, `mbstring`, `mysqli`, `openssl`, `pdo_mysql`, `zip`
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🚀 Quick Start / Installation Guide
 
-## Security Vulnerabilities
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Diploy-Space/Drozio-web.git
+cd Drozio-web
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Install Backend Dependencies
+```bash
+composer install --optimize-autoloader --no-dev
+```
 
-## License
+### 3. Environment Configuration
+Duplicate the example environment file and generate a unique application encryption key:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Configure your database and application URL in `.env`:
+```ini
+APP_NAME=Drozio
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_secure_password
+
+QUEUE_CONNECTION=database
+```
+
+### 4. Database Setup & Migrations
+Execute the database schema migrations:
+```bash
+php artisan migrate
+```
+
+*(Optional: If setting up a fresh demonstration database with sample data)*
+```bash
+php artisan db:seed
+```
+
+### 5. Link Public Storage
+```bash
+php artisan storage:link
+```
+
+### 6. Install & Compile Frontend Assets
+```bash
+npm install
+npm run build
+```
+
+---
+
+## ⚡ Deployment: Queues & Scheduler (Production Critical)
+
+> [!IMPORTANT]
+> Order confirmations, registration emails, and Firebase Cloud Messaging (FCM) notifications execute asynchronously on **background queues**. Production environments **must** run an active queue worker.
+
+### 1. Running the Queue Worker
+Run the worker across all prioritized application queues:
+```bash
+php -d memory_limit=512M artisan queue:work database \
+    --queue=exports,high,default,auctions,auction_notifications \
+    --tries=3 --timeout=900 --max-time=3600 --sleep=3
+```
+
+#### Recommended: Supervisor Configuration (`/etc/supervisor/conf.d/drozio-worker.conf`)
+```ini
+[program:drozio-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /path/to/Drozio-web/artisan queue:work database --queue=exports,high,default,auctions,auction_notifications --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/path/to/Drozio-web/storage/logs/worker.log
+```
+
+### 2. Task Scheduler (Cron Job)
+Configure a single cron entry to drive scheduled promotions, cache invalidation, and recurring jobs:
+```bash
+* * * * * cd /path/to/Drozio-web && php artisan schedule:run >> /dev/null 2>&1
+```
+
+---
+
+## 📁 Repository Directory Structure
+
+```text
+Drozio-web/
+├── app/                      # Core MVC: Controllers, Middleware, Models, Services
+│   ├── Http/Controllers/     # Admin, Vendor, and REST API v6 Controllers
+│   ├── Library/              # Payment gateways, helper libraries, constants
+│   ├── Models/               # Eloquent domain models
+│   ├── Providers/            # Service providers (RouteServiceProvider, etc.)
+│   └── Services/             # Business logic service abstractions
+├── Modules/                  # Modular Architecture extensions
+│   ├── AI/                   # Generative AI tools & limits
+│   ├── Blog/                 # Content marketing & publication engine
+│   ├── Courier/              # Automated shipping, dispatch & tracking
+│   └── TaxModule/            # Enterprise multi-tier tax computations
+├── config/                   # System, gateway, and database configurations
+├── database/                 # Schema migrations, seeders, and factories
+│   └── migrations/           # 340+ incremental migrations
+├── public/                   # Web root (Vite compiled build assets, themes)
+├── resources/                # Blade views, React/Inertia components, and CSS
+├── routes/                   # Routing declarations (web, api, admin, vendor)
+└── tests/                    # Feature and Unit test suites
+```
+
+---
+
+## 📱 Mobile Applications (Flutter)
+
+Drozio-web powers native mobile clients via versioned REST APIs (`/api/v6/`):
+- **User App:** Customer shopping application (`flutter_sixvalley_ecommerce`) supporting real-time push notifications, payment gateways, live bidding, and order tracking.
+- **Vendor App:** Dedicated merchant portal (`sixvalley_vendor_app`) for catalog updates, POS invoice printing via Bluetooth thermal printers, and live order alerts.
+
+Compatible with **Flutter SDK 3.47.7+** and **Dart 3.6.2+**.
+
+---
+
+## 🧹 Maintenance & Diagnostic Commands
+
+| Command | Description |
+| :--- | :--- |
+| `php artisan optimize:clear` | Flush configuration, routing, view, and application caches. |
+| `php artisan config:cache` | Pre-compile environment configurations for maximum production throughput. |
+| `php artisan route:cache` | Pre-compile route map for near-instant route resolution. |
+| `php artisan file:permission` | Automatically correct storage and bootstrap directory ownership. |
+| `php artisan queue:failed` | Inspect failed background jobs. |
+| `php artisan queue:retry all` | Re-queue all previously failed background tasks. |
+
+---
+
+## 🔒 Security & Contribution Guidelines
+
+- If you identify security vulnerabilities within this repository, please notify the technical lead directly.
+- Ensure all pull requests follow project styling rules, include appropriate database migrations, and pass local syntax checks prior to merging.
+
+---
+
+## 📄 License & Attribution
+
+This software repository is customized and maintained by the **Drozio Engineering Team**.  
+All rights reserved &copy; 2026.
