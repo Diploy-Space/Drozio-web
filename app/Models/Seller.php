@@ -94,6 +94,7 @@ class Seller extends Authenticatable
 
     protected $hidden = [
         'password',
+        'auth_token',
     ];
 
     public function scopeApproved($query)

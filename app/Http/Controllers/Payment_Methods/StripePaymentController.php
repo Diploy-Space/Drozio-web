@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 class StripePaymentController extends Controller
@@ -74,6 +75,8 @@ class StripePaymentController extends Controller
 
         $checkout_session = Session::create([
             'payment_method_types' => ['card'],
+            'metadata' => ['payment_id' => $data->id],
+            'client_reference_id' => (string) $data->id,
             'line_items' => [[
                 'price_data' => [
                     'currency' => $currency_code ?? 'usd',
@@ -95,12 +98,30 @@ class StripePaymentController extends Controller
 
     public function success(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'payment_id' => 'required|uuid',
+            'payment_session_id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_400, null, $this->error_processor($validator)), 400);
+        }
+
+        $data = $this->payment::where(['id' => $request['payment_id']])->where(['is_paid' => 0])->first();
+        if (!isset($data)) {
+            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
+        }
+
         Stripe::setApiKey($this->config_values->api_key);
-        $session = Session::retrieve($request->get('payment_session_id'));
 
-        if ($session->payment_status == 'paid' && $session->status == 'complete') {
+        try {
+            $session = Session::retrieve($request->get('payment_session_id'));
+        } catch (ApiErrorException) {
+            return response()->json($this->response_formatter(GATEWAYS_DEFAULT_400), 400);
+        }
 
-            $this->payment::where(['id' => $request['payment_id']])->update([
+        if ($this->sessionMatchesPayment($session, $data)) {
+            $this->payment::where(['id' => $request['payment_id'], 'is_paid' => 0])->update([
                 'payment_method' => 'stripe',
                 'is_paid' => 1,
                 'transaction_id' => $session->payment_intent,
@@ -112,12 +133,42 @@ class StripePaymentController extends Controller
                 call_user_func($data->success_hook, $data);
             }
 
-            return $this->payment_response($data,'success');
+            return $this->payment_response($data, 'success');
         }
+
         $payment_data = $this->payment::where(['id' => $request['payment_id']])->first();
         if (isset($payment_data) && function_exists($payment_data->failure_hook)) {
             call_user_func($payment_data->failure_hook, $payment_data);
         }
-        return $this->payment_response($payment_data,'fail');
+        return $this->payment_response($payment_data, 'fail');
+    }
+
+    /**
+     * The session must be the one created for this payment request, and the money
+     * actually collected must match the request amount and currency.
+     */
+    private function sessionMatchesPayment(object $session, $data): bool
+    {
+        if (($session->payment_status ?? null) !== 'paid' || ($session->status ?? null) !== 'complete') {
+            return false;
+        }
+
+        $sessionPaymentId = $session->metadata->payment_id ?? $session->client_reference_id ?? null;
+
+        if ((string) $sessionPaymentId !== (string) $data->id) {
+            return false;
+        }
+
+        $expectedAmount = (int) round(((float) $data->payment_amount) * 100);
+        $amountTotal = $session->amount_total ?? null;
+
+        if ($amountTotal !== null && (int) $amountTotal !== $expectedAmount) {
+            return false;
+        }
+
+        $currency = strtolower((string) ($session->currency ?? ''));
+        $expectedCurrency = strtolower((string) ($data->currency_code ?? ''));
+
+        return $currency === '' || $expectedCurrency === '' || $currency === $expectedCurrency;
     }
 }

@@ -14,10 +14,13 @@ class APIGuestMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if ($request->header('Authorization') && app('auth')->guard('api')) {
+        if (auth('api')->check()) {
             $request->merge(['user' => auth('api')->user()]);
+
             return $next($request);
-        } elseif ($request->guest_id) {
+        }
+
+        if ($request->filled('guest_id')) {
             return $next($request);
         }
 
