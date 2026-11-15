@@ -36,7 +36,6 @@ class VendorTaxReportController extends Controller
         private readonly TaxAdditionalSetup $taxAdditionalSetup,
         private readonly ShopService $shopService
     ) {
-        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
     }
 
     public static function apiTaxReportDateRange($request): string

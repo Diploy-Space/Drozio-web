@@ -1,4 +1,8 @@
 * text=auto
+# Shell scripts and the Dockerfile run inside Linux containers. If Git checks
+# them out with CRLF the shebang breaks, so pin them to LF.
+*.sh text eol=lf
+Dockerfile text eol=lf
 *.css linguist-vendored
 *.scss linguist-vendored
 *.js linguist-vendored

@@ -168,7 +168,10 @@ class DigitalProductDownloadController extends BaseApiController
 
         $tokenParams = ['token' => $request['otp'], 'order_details_id' => $orderDetail->id];
 
-        if ($this->digitalProductOtpVerificationService->findBy(params: $tokenParams) === null) {
+        if ($this->digitalProductOtpVerificationService->findValidToken(
+            orderDetailId: $orderDetail->id,
+            token: $request['otp'],
+        ) === null) {
             return $this->responseFormatter(config: config('response.digital_download_otp_incorrect'));
         }
 
