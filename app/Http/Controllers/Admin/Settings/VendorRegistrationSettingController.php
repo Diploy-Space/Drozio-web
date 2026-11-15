@@ -253,7 +253,6 @@ class VendorRegistrationSettingController extends BaseController
         }
 
         $image = (array) $storedImage;
-
         return [
             'image_name' => $image['image_name'] ?? null,
             'storage' => $image['storage'] ?? $this->defaultStorage(),
