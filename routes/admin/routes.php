@@ -108,6 +108,7 @@ use App\Http\Controllers\Admin\Vendor\VendorController;
 use App\Http\Controllers\Admin\Vendor\VerificationController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\SharedController;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(SharedController::class)->group(function () {
@@ -120,7 +121,9 @@ Route::controller(SharedController::class)->group(function () {
 });
 
 Route::controller(FirebaseController::class)->group(function () {
-    Route::post('system/subscribe-to-topic', 'subscribeToTopic')->name('system.subscribe-to-topic');
+    Route::post('system/subscribe-to-topic', 'subscribeToTopic')
+        ->name('system.subscribe-to-topic')
+        ->middleware('throttle:'.RouteServiceProvider::LIMITER_PUBLIC_WRITE);
 });
 
 Route::group(['prefix' => 'login'], function () {
@@ -454,6 +457,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
             });
         });
 
+        Route::group(['prefix' => 'kyc', 'as' => 'kyc.'], function () {
+            Route::controller(\App\Http\Controllers\Admin\Vendor\VendorKycController::class)->group(function () {
+                Route::get('list', 'index')->name('list');
+                Route::get('view/{id}', 'show')->name('view');
+                Route::post('review/{id}', 'review')->name('review');
+            });
+        });
         Route::group(['prefix' => 'withdraw-method', 'as' => 'withdraw-method.'], function () {
             Route::get('list', [WithdrawalMethodController::class, 'index'])->name('list')->defaults('userType', 'vendor');
             Route::post('add', [WithdrawalMethodController::class, 'add'])->name('add')->defaults('userType', 'vendor');
@@ -1269,3 +1279,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
         });
     });
 });
+

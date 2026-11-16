@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\VendorStatus;
 use App\Models\Seller;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -17,10 +18,10 @@ class SellerApiAuthMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $token = explode(' ', $request->header('authorization'));
+        $token = explode(' ', (string) $request->header('authorization'));
         if (count($token) > 1 && strlen($token[1]) > 30) {
-            $seller = Seller::where(['auth_token' => $token['1']])->first();
-            if (isset($seller)) {
+            $seller = Seller::where(['auth_token' => $token[1]])->first();
+            if (isset($seller) && $seller->status === VendorStatus::APPROVED) {
                 $request['seller'] = $seller;
 
                 return $next($request);

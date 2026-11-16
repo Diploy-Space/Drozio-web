@@ -133,6 +133,90 @@ npm run build
 
 ---
 
+## 🐳 Local Development with Docker
+
+The repository ships a complete Docker setup (PHP 8.3 + Apache, MariaDB 10.11) so you
+can run the platform locally without installing PHP, Composer or MySQL on the host.
+Only **Docker Desktop** is required.
+
+### First-time setup
+
+```bash
+# 1. Create the environment file and point it at the containers
+cp .env.example .env
+#    then set at least:
+#    APP_URL=http://localhost:8080
+#    DB_HOST=db
+#    DB_PORT=3306
+#    DB_DATABASE=6valley
+#    DB_USERNAME=6valley
+#    DB_PASSWORD=6valley_secret
+
+# 2. Build the image and start the database + web server
+docker compose build app
+docker compose up -d db app
+
+# 3. Copy the checkout into the application volume (one-time, a few minutes)
+powershell -ExecutionPolicy Bypass -File .\docker\sync.ps1 -Full
+
+# 4. Install dependencies, run migrations and create the local admin
+docker compose exec app sh /var/www/html/docker/setup.sh
+```
+
+The storefront is then available at **http://localhost:8080**, the admin panel at
+**http://localhost:8080/login/admin** with `admin@admin.com` / `12345678`.
+MariaDB is exposed on `localhost:3307` (`6valley` / `6valley_secret`, root password
+`root`) if you want to connect with a desktop client.
+
+### Day-to-day workflow
+
+The application code runs from a Docker volume instead of a bind mount, because
+Docker Desktop serves Windows paths at roughly 3–11 ms per file stat and a Laravel
+request touches around a thousand files (≈20 s per page from a bind mount versus
+≈0.6 s from a volume). Edit files in this checkout as usual, then push them into the
+container:
+
+```powershell
+.\docker\sync.ps1            # copy changed/new/deleted files once
+.\docker\sync.ps1 -Watch     # keep copying on every save (Ctrl+C to stop)
+.\docker\sync.ps1 -Full      # re-seed the whole checkout
+```
+
+Only changed files are copied (size + mtime comparison), and runtime or
+dependency paths (`vendor/`, `node_modules/`, `storage/`, `bootstrap/cache/`,
+`public/build/`) are never touched. The first plain `sync.ps1` run seeds
+automatically if the volume is still empty.
+
+Common commands:
+
+```bash
+docker compose exec app php artisan migrate          # any artisan command
+docker compose exec app php artisan tinker
+docker compose logs -f app                           # Apache/PHP logs
+docker compose --profile worker up -d queue          # background queue worker
+docker compose --profile tools run --rm node         # npm install + vite build
+```
+
+> [!NOTE]
+> `public/build` is not required by the current Blade UI — it is only used by
+> `resources/views/app.blade.php` (the Inertia/React scaffold). Build the Vite assets
+> with the `node` profile above if you start using that view.
+
+### Resetting the environment
+
+```bash
+docker compose down -v      # deletes the app code, vendor and database volumes
+docker compose up -d db app
+powershell -ExecutionPolicy Bypass -File .\docker\sync.ps1 -Full
+docker compose exec app sh /var/www/html/docker/setup.sh
+```
+
+`docker/setup.sh` is idempotent: it only installs Composer dependencies when
+`vendor/` is missing, reloads `installation/backup/database.sql` only when the schema
+is absent, and upserts the local admin account.
+
+---
+
 ## ⚡ Deployment: Queues & Scheduler (Production Critical)
 
 > [!IMPORTANT]

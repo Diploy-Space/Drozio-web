@@ -184,9 +184,14 @@ class SslCommerzPaymentController extends Controller
 
     public function success(Request $request): JsonResponse|Redirector|RedirectResponse|Application
     {
-        if ($request['status'] == 'VALID' && $this->SSLCOMMERZ_hash_verify($this->store_password, $request)) {
+        $data = $this->payment::where(['id' => $request['payment_id']])->where(['is_paid' => 0])->first();
 
-            $this->payment::where(['id' => $request['payment_id']])->update([
+        if ($data !== null
+            && $request['status'] == 'VALID'
+            && $this->SSLCOMMERZ_hash_verify($this->store_password, $request)
+            && $this->amountMatchesPayment(request: $request, data: $data)
+        ) {
+            $this->payment::where(['id' => $request['payment_id'], 'is_paid' => 0])->update([
                 'payment_method' => 'ssl_commerz',
                 'is_paid' => 1,
                 'transaction_id' => $request->input('tran_id')
@@ -204,6 +209,23 @@ class SslCommerzPaymentController extends Controller
             call_user_func($payment_data->failure_hook, $payment_data);
         }
         return $this->payment_response($payment_data, 'fail');
+    }
+
+    /**
+     * Gateways echo the paid amount back; it must match the request amount.
+     */
+    private function amountMatchesPayment(Request $request, $data): bool
+    {
+        $amount = $request->input('amount');
+
+        if ($amount !== null && abs((float) $amount - (float) $data->payment_amount) > 0.01) {
+            return false;
+        }
+
+        $currency = strtoupper((string) $request->input('currency', ''));
+        $expectedCurrency = strtoupper((string) ($data->currency_code ?? ''));
+
+        return $currency === '' || $expectedCurrency === '' || $currency === $expectedCurrency;
     }
 
     public function failed(Request $request): JsonResponse|Redirector|RedirectResponse|Application

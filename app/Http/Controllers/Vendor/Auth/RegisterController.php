@@ -11,6 +11,7 @@ use App\Services\New\Auth\VendorAuthService;
 use App\Services\New\BusinessSettingService;
 use App\Services\New\HelpTopicService;
 use App\Services\New\ShopService;
+use App\Services\New\VendorKycService;
 use App\Services\New\VendorRegistrationReasonService;
 use App\Services\New\VendorWalletService;
 use App\Services\RecaptchaService;
@@ -36,6 +37,7 @@ class RegisterController extends BaseController
         private readonly BusinessSettingService $businessSettingService,
         private readonly HelpTopicService $helpTopicService,
         private readonly VendorRegistrationReasonService $vendorRegistrationReasonService,
+        private readonly VendorKycService $vendorKycService,
     ) {}
 
     public function index(?Request $request, ?string $type = null): View|Collection|LengthAwarePaginator|null|callable|RedirectResponse
@@ -93,7 +95,7 @@ class RegisterController extends BaseController
                     'name' => $request['shop_name'],
                     'contact' => $request['phone'],
                     'address' => $request['shop_address'],
-                    'tax_identification_number' => $request['tax_identification_number'],
+                    'tax_identification_number' => $request['tax_identification_number'] ?? $request['gst_number'],
                     'tin_expire_date' => $request['tin_expire_date'],
                 ],
                 images: [
@@ -105,6 +107,29 @@ class RegisterController extends BaseController
             );
 
             $this->sellerWalletService->createForSeller(sellerId: $vendor->id);
+
+            // KYC: create/update profile, upload documents, and submit for review (uses KYC module/service)
+            $profile = $this->vendorKycService->getOrCreateForSeller($vendor);
+            $profile = $this->vendorKycService->updateProfile($profile, $request->only([
+                'business_type','legal_name','trade_name','registration_type','gst_number',
+                'pan_number','pan_holder_name',
+                'business_address_line1','business_address_line2','business_city','business_state','business_pincode','business_country',
+                'bank_account_name','bank_name','bank_branch','bank_account_no','bank_ifsc',
+            ]));
+            $docs = [
+                'pan_card' => $request->file('kyc_pan_card'),
+                'gst_certificate' => $request->file('kyc_gst_certificate'),
+                'address_proof' => $request->file('kyc_address_proof'),
+                'bank_proof' => $request->file('kyc_bank_proof'),
+                'business_registration' => $request->file('kyc_business_registration'),
+            ];
+            foreach ($docs as $type => $file) {
+                if ($file) {
+                    $this->vendorKycService->uploadDocument($profile, $type, $file);
+                }
+            }
+            $profile->refresh()->load('documents');
+            $this->vendorKycService->submit($profile, 'vendor', $vendor->id, false);
 
             return $vendor;
         });
