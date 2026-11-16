@@ -2226,4 +2226,7 @@ return [
     'The company mobile logo must be at least 100x60 pixels' => 'The company mobile logo must be at least 100x60 pixels',
     'Please enter a valid app store download link' => 'Please enter a valid app store download link',
     'Please enter a valid Play Store download link' => 'Please enter a valid Play Store download link',
+    'No withdraw method found' => 'No withdraw method found',
+    'Order statistics' => 'Order statistics',
+    'Total Vendor Sales' => 'Total Vendor Sales',
 ];

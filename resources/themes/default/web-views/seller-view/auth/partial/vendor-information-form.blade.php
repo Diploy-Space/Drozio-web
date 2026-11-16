@@ -134,6 +134,113 @@
                             </div>
                         </div>
 
+                        <div class="border p-3 p-xl-4 rounded mt-4" id="vendor-kyc-section">
+                            <h4 class="mb-3 text-capitalize">{{ translate('Vendor KYC & Business Verification') }}</h4>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('Business Type') }} <span class="text-danger">*</span></label>
+                                        <select name="business_type" class="form-control" required>
+                                            <option value="">{{ translate('Select business type') }}</option>
+                                            <option value="proprietorship">{{ translate('Proprietorship') }}</option>
+                                            <option value="partnership">{{ translate('Partnership') }}</option>
+                                            <option value="llp">{{ translate('LLP') }}</option>
+                                            <option value="private_limited">{{ translate('Private Limited') }}</option>
+                                            <option value="public_limited">{{ translate('Public Limited') }}</option>
+                                            <option value="other">{{ translate('Other') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('Registration Type') }} <span class="text-danger">*</span></label>
+                                        <select name="registration_type" id="kyc_registration_type" class="form-control" required>
+                                            <option value="">{{ translate('Select registration type') }}</option>
+                                            <option value="gst">{{ translate('GST Registered') }}</option>
+                                            <option value="non_gst">{{ translate('Non-GST') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('Legal Name') }} <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" name="legal_name" placeholder="{{ translate('Legal business name') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('Trade Name') }} <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" name="trade_name" placeholder="{{ translate('Trade name') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 kyc-gst-field d-none">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('GST Number') }} <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" name="gst_number" placeholder="{{ translate('GST number') }}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('PAN Number') }} <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" name="pan_number" placeholder="{{ translate('PAN number') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-4">
+                                        <label class="mb-2 text-capitalize">{{ translate('PAN Holder Name') }} <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" name="pan_holder_name" placeholder="{{ translate('PAN holder name') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <h5 class="mb-3">{{ translate('Business Address') }}</h5>
+                            <div class="row">
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('Address Line 1') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="business_address_line1" required></div></div>
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('Address Line 2') }}</label><input class="form-control" type="text" name="business_address_line2"></div></div>
+                                <div class="col-sm-6 col-md-3"><div class="form-group mb-4"><label class="mb-2">{{ translate('City') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="business_city" required></div></div>
+                                <div class="col-sm-6 col-md-3"><div class="form-group mb-4"><label class="mb-2">{{ translate('State') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="business_state" required></div></div>
+                                <div class="col-sm-6 col-md-3"><div class="form-group mb-4"><label class="mb-2">{{ translate('PIN Code') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="business_pincode" required></div></div>
+                                <div class="col-sm-6 col-md-3"><div class="form-group mb-4"><label class="mb-2">{{ translate('Country') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="business_country" value="India" required></div></div>
+                            </div>
+                            <hr>
+                            <h5 class="mb-3">{{ translate('Bank Account Verification') }}</h5>
+                            <div class="row">
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('Account Holder Name') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="bank_account_name" required></div></div>
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('Bank Name') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="bank_name" required></div></div>
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('Branch') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="bank_branch" required></div></div>
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('Account Number') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="bank_account_no" required></div></div>
+                                <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2">{{ translate('IFSC') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="bank_ifsc" required></div></div>
+                            </div>
+                            <hr>
+                            <h5 class="mb-3">{{ translate('KYC Documents') }}</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('PAN Card') }} <span class="text-danger">*</span></label><input type="file" name="kyc_pan_card" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
+                                <div class="col-md-6 kyc-gst-field d-none"><div class="form-group"><label class="mb-2">{{ translate('GST Certificate') }} <span class="text-danger">*</span></label><input type="file" name="kyc_gst_certificate" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"></div></div>
+                                <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Business Address Proof') }} <span class="text-danger">*</span></label><input type="file" name="kyc_address_proof" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
+                                <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Bank Proof (Cheque/Passbook)') }} <span class="text-danger">*</span></label><input type="file" name="kyc_bank_proof" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
+                                <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Business Registration Proof') }} <span class="text-danger">*</span></label><input type="file" name="kyc_business_registration" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
+                            </div>
+                        </div>
+                        <script>
+                        (function(){
+                            function toggleKycGst(){
+                                var v = document.getElementById('kyc_registration_type');
+                                var isGst = v && v.value === 'gst';
+                                document.querySelectorAll('#vendor-kyc-section .kyc-gst-field').forEach(function(el){
+                                    el.classList.toggle('d-none', !isGst);
+                                    var inp = el.querySelector('input,select,textarea');
+                                    if(inp){
+                                        if(isGst){ inp.setAttribute('required','required'); }
+                                        else { inp.removeAttribute('required'); if(inp.type==='file'){ inp.value=''; } }
+                                    }
+                                });
+                            }
+                            document.addEventListener('change', function(e){ if(e.target && e.target.id==='kyc_registration_type'){ toggleKycGst(); } });
+                            document.addEventListener('DOMContentLoaded', toggleKycGst);
+                            toggleKycGst();
+                        })();
+                        </script>
+
                         <div class="border p-3 p-xl-4 rounded mt-2">
                             <div class="row gy-4">
                                 <div class="col-lg-6">

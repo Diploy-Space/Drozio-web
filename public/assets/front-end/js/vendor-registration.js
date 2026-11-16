@@ -68,10 +68,12 @@ function submitRegistration() {
     }).then((result) => {
         if (result.value) {
 
-            let formData = new FormData(document.getElementById(getFormId));
+            let form = document.getElementById(getFormId);
+            let formData = new FormData(form);
+            let csrfToken = $('meta[name="csrf-token"]').attr('content') || $(form).find('input[name="_token"]').val();
             $.ajaxSetup({
                 headers: {
-                    'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': csrfToken
                 }
             });
             $.post({
