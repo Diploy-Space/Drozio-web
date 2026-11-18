@@ -20,10 +20,11 @@ class VendorKycProfile extends Model
 
     protected $fillable = [
         'seller_id','shop_id','business_type','legal_name','trade_name','registration_type',
-        'gst_number','pan_number','pan_holder_name','pan_verification_status',
+        'gst_number','gst_verification_status','gst_verified_at','gst_verification_ref','gst_verification_meta',
+        'pan_number','pan_holder_name','pan_dob','pan_verification_status','pan_verified_at','pan_verification_ref','pan_verification_meta',
         'business_address_line1','business_address_line2','business_city','business_state','business_pincode','business_country',
-        'bank_account_name','bank_name','bank_branch','bank_account_no','bank_ifsc','bank_verification_status',
-        'status','rejection_reason','correction_note','submitted_at','reviewed_at','reviewed_by',
+        'bank_account_name','bank_name','bank_branch','bank_account_no','bank_ifsc','bank_verification_status','bank_verified_at','bank_verification_ref','bank_verification_meta',
+        'status','verification_mode','rejection_reason','correction_note','online_consent_at','submitted_at','reviewed_at','reviewed_by',
     ];
 
     protected $casts = [
@@ -32,6 +33,13 @@ class VendorKycProfile extends Model
         'reviewed_by' => 'integer',
         'submitted_at' => 'datetime',
         'reviewed_at' => 'datetime',
+        'pan_verified_at' => 'datetime',
+        'gst_verified_at' => 'datetime',
+        'bank_verified_at' => 'datetime',
+        'online_consent_at' => 'datetime',
+        'pan_verification_meta' => 'array',
+        'gst_verification_meta' => 'array',
+        'bank_verification_meta' => 'array',
     ];
 
     public function seller(): BelongsTo

@@ -99,6 +99,7 @@ use App\Http\Controllers\Admin\ThirdParty\GoogleMapAPIController;
 use App\Http\Controllers\Admin\ThirdParty\MailController;
 use App\Http\Controllers\Admin\ThirdParty\PaymentMethodController;
 use App\Http\Controllers\Admin\ThirdParty\RecaptchaController;
+use App\Http\Controllers\Admin\ThirdParty\SandboxKycController;
 use App\Http\Controllers\Admin\ThirdParty\SMSModuleController;
 use App\Http\Controllers\Admin\ThirdParty\SocialLoginSettingsController;
 use App\Http\Controllers\Admin\ThirdParty\SocialMediaChatController;
@@ -1011,6 +1012,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin', '
             Route::controller(GoogleMapAPIController::class)->group(function () {
                 Route::get('map-api', 'index')->name('map-api');
                 Route::post('map-api', 'update');
+            });
+
+            Route::controller(SandboxKycController::class)->group(function () {
+                Route::get('sandbox-kyc', 'index')->name('sandbox-kyc');
+                Route::post('sandbox-kyc', 'update');
             });
 
         });

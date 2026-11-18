@@ -16,6 +16,7 @@ class VendorKycDocument extends Model
 
     protected $fillable = [
         'vendor_kyc_profile_id','document_type','file_path','storage','original_name','mime_type','file_size','status','review_note',
+        'verification_method','verification_provider','verification_reference','verified_at','verification_meta',
     ];
 
     protected $appends = ['file_full_url'];
@@ -23,6 +24,8 @@ class VendorKycDocument extends Model
     protected $casts = [
         'vendor_kyc_profile_id' => 'integer',
         'file_size' => 'integer',
+        'verified_at' => 'datetime',
+        'verification_meta' => 'array',
     ];
 
     public function profile(): BelongsTo

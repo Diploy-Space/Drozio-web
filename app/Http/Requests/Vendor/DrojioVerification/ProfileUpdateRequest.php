@@ -18,6 +18,8 @@ class ProfileUpdateRequest extends BaseRequest
             'gst_number' => [$isGst ? 'sometimes' : 'sometimes', 'nullable', 'string', 'max:50'],
             'pan_number' => ['sometimes', 'nullable', 'string', 'max:20'],
             'pan_holder_name' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'pan_dob' => ['sometimes', 'nullable', 'string', 'max:20'],
+            'verification_mode' => ['sometimes', 'nullable', 'in:online,manual,hybrid'],
             'business_address_line1' => ['sometimes', 'nullable', 'string', 'max:255'],
             'business_address_line2' => ['sometimes', 'nullable', 'string', 'max:255'],
             'business_city' => ['sometimes', 'nullable', 'string', 'max:100'],

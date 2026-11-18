@@ -184,6 +184,17 @@
                              </div>
                              <div class="border p-3 p-xl-4 rounded mb-4" id="vendor-kyc-section">
                                  <h4 class="mb-3 text-capitalize">{{ translate('Vendor KYC & Business Verification') }}</h4>
+                                 <div class="alert alert-soft-info mb-3">
+                                     <strong>{{ translate('Online KYC') }}:</strong> {{ translate('PAN, GSTIN and Bank details are verified via API as primary method. If online verification is unavailable, upload documents for manual verification.') }}
+                                 </div>
+                                 <div class="row mb-2">
+                                     <div class="col-md-6"><div class="form-group mb-3"><label class="mb-2">{{ translate('Verification Method') }}</label>
+                                         <select name="kyc_verification_mode" id="kyc_verification_mode" class="form-control">
+                                             <option value="online" selected>{{ translate('Online API Verification (Primary)') }}</option>
+                                             <option value="manual">{{ translate('Manual Document Verification') }}</option>
+                                         </select></div></div>
+                                     <div class="col-md-6"><div class="form-group mb-3" id="kyc-online-consent-wrap"><label class="d-flex align-items-start gap-2 mt-md-4"><input type="checkbox" name="online_consent" value="Y" checked><span>{{ translate('I consent to online verification of PAN/GSTIN/Bank details.') }}</span></label></div></div>
+                                 </div>
                                  <div class="row">
                                      <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2 text-capitalize">{{ translate('Business Type') }} <span class="text-danger">*</span></label>
                                          <select name="business_type" class="form-control" required>
@@ -206,6 +217,7 @@
                                      <div class="col-sm-6 kyc-gst-field d-none"><div class="form-group mb-4"><label class="mb-2 text-capitalize">{{ translate('GST Number') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="gst_number"></div></div>
                                      <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2 text-capitalize">{{ translate('PAN Number') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="pan_number" required></div></div>
                                      <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2 text-capitalize">{{ translate('PAN Holder Name') }} <span class="text-danger">*</span></label><input class="form-control" type="text" name="pan_holder_name" required></div></div>
+                                     <div class="col-sm-6"><div class="form-group mb-4"><label class="mb-2 text-capitalize">{{ translate('PAN Holder Date of Birth') }} <small class="text-muted">({{ translate('for online PAN verification') }})</small></label><input class="form-control" type="date" name="pan_dob"></div></div>
                                  </div>
                                  <hr>
                                  <h5 class="mb-3">{{ translate('Business Address') }}</h5>
@@ -228,11 +240,12 @@
                                  </div>
                                  <hr>
                                  <h5 class="mb-3">{{ translate('KYC Documents') }}</h5>
+                                 <p class="text-muted small mb-2">{{ translate('Address and business registration proofs are required. PAN/GST/Bank documents required if not verified online.') }}</p>
                                  <div class="row g-3">
-                                     <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('PAN Card') }} <span class="text-danger">*</span></label><input type="file" name="kyc_pan_card" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
-                                     <div class="col-md-6 kyc-gst-field d-none"><div class="form-group"><label class="mb-2">{{ translate('GST Certificate') }} <span class="text-danger">*</span></label><input type="file" name="kyc_gst_certificate" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"></div></div>
+                                     <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('PAN Card') }} <span class="text-muted small">({{ translate('manual/fallback') }})</span></label><input type="file" name="kyc_pan_card" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"></div></div>
+                                     <div class="col-md-6 kyc-gst-field d-none"><div class="form-group"><label class="mb-2">{{ translate('GST Certificate') }} <span class="text-muted small">({{ translate('manual/fallback') }})</span></label><input type="file" name="kyc_gst_certificate" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"></div></div>
                                      <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Business Address Proof') }} <span class="text-danger">*</span></label><input type="file" name="kyc_address_proof" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
-                                     <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Bank Proof (Cheque/Passbook)') }} <span class="text-danger">*</span></label><input type="file" name="kyc_bank_proof" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
+                                     <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Bank Proof (Cheque/Passbook)') }} <span class="text-muted small">({{ translate('manual/fallback') }})</span></label><input type="file" name="kyc_bank_proof" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"></div></div>
                                      <div class="col-md-6"><div class="form-group"><label class="mb-2">{{ translate('Business Registration Proof') }} <span class="text-danger">*</span></label><input type="file" name="kyc_business_registration" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" required></div></div>
                                  </div>
                              </div>
@@ -240,14 +253,20 @@
                              (function(){
                                  function toggleKycGst(){
                                      var v = document.getElementById('kyc_registration_type');
+                                     var modeEl = document.getElementById('kyc_verification_mode');
+                                     var mode = modeEl ? modeEl.value : 'online';
                                      var isGst = v && v.value === 'gst';
                                      document.querySelectorAll('#vendor-kyc-section .kyc-gst-field').forEach(function(el){
                                          el.classList.toggle('d-none', !isGst);
-                                         var inp = el.querySelector('input,select,textarea');
-                                         if(inp){ if(isGst){ inp.setAttribute('required','required'); } else { inp.removeAttribute('required'); if(inp.type==='file'){ inp.value=''; } } }
+                                         var inp = el.querySelector('input[name="gst_number"]');
+                                         if(inp){ if(isGst){ inp.setAttribute('required','required'); } else { inp.removeAttribute('required'); inp.value=''; } }
+                                         var file = el.querySelector('input[type="file"][name="kyc_gst_certificate"]');
+                                         if(file){ file.removeAttribute('required'); if(!isGst){ file.value=''; } }
                                      });
+                                     var consentWrap = document.getElementById('kyc-online-consent-wrap');
+                                     if(consentWrap){ consentWrap.style.display = (mode === 'online') ? '' : 'none'; }
                                  }
-                                 document.addEventListener('change', function(e){ if(e.target && e.target.id==='kyc_registration_type'){ toggleKycGst(); } });
+                                 document.addEventListener('change', function(e){ if(e.target && (e.target.id==='kyc_registration_type' || e.target.id==='kyc_verification_mode')){ toggleKycGst(); } });
                                  document.addEventListener('DOMContentLoaded', toggleKycGst);
                                  toggleKycGst();
                              })();

@@ -117,4 +117,62 @@ class DrojioVerificationController extends BaseApiController
             content: ['data' => $requirements]
         );
     }
+
+    public function submit(Request $request): JsonResponse
+    {
+        $seller = $this->seller($request);
+        $profile = $this->vendorKycService->getOrCreateForSeller($seller);
+        $result = $this->vendorKycService->submit($profile, 'vendor', (int) $seller->id, false);
+
+        if (! ($result['ok'] ?? false)) {
+            return $this->responseFormatter(
+                config: config('response.unprocessable_entity_422'),
+                content: ['data' => $result],
+                errors: [['error_code' => 'kyc_submit_failed', 'message' => $result['message'] ?? translate('Unable to submit KYC')]]
+            );
+        }
+
+        $profile = $profile->fresh(['documents']);
+        return $this->responseFormatter(
+            config: config('response.information_updated'),
+            content: ['data' => $this->vendorKycService->statusPayload($profile), 'message' => $result['message']]
+        );
+    }
+
+    public function verifyOnline(Request $request): JsonResponse
+    {
+        $seller = $this->seller($request);
+        $profile = $this->vendorKycService->getOrCreateForSeller($seller);
+
+        if (! $profile->isEditableByVendor() && $profile->status !== 'draft') {
+            return $this->responseFormatter(
+                config: config('response.forbidden_403'),
+                errors: [['error_code' => 'kyc_not_editable', 'message' => translate('KYC profile cannot be edited in current status')]]
+            );
+        }
+
+        // Optionally update profile fields provided for verification
+        $updatable = array_filter($request->only([
+            'pan_number','pan_holder_name','pan_dob','gst_number','bank_account_name','bank_name','bank_account_no','bank_ifsc','verification_mode','registration_type'
+        ]), fn($v) => $v !== null);
+        if (!empty($updatable)) {
+            $profile = $this->vendorKycService->updateProfile($profile, $updatable);
+        }
+
+        $types = $request->input('types');
+        if (is_string($types)) $types = array_filter(array_map('trim', explode(',', $types)));
+        if (!is_array($types) || empty($types)) $types = ['pan','gstin','bank'];
+
+        $results = $this->vendorKycService->verifyOnline($profile, $types, $request->all());
+        $profile = $profile->fresh(['documents']);
+
+        return $this->responseFormatter(
+            config: config('response.data_fetched'),
+            content: ['data' => [
+                'results' => $results,
+                'profile' => new ProfileResource($profile),
+                'status' => $this->vendorKycService->statusPayload($profile),
+            ]]
+        );
+    }
 }
