@@ -8,6 +8,8 @@ Route::middleware('v6_seller_auth')->prefix('drojio/vendor/verification')->group
     Route::put('profile', [DrojioVerificationController::class, 'updateProfile']);
     Route::post('documents', [DrojioVerificationController::class, 'uploadDocument']);
     Route::get('status', [DrojioVerificationController::class, 'getStatus']);
+    Route::post('submit', [DrojioVerificationController::class, 'submit']);
     Route::post('resubmit', [DrojioVerificationController::class, 'resubmit']);
     Route::get('requirements', [DrojioVerificationController::class, 'getRequirements']);
+    Route::post('verify-online', [DrojioVerificationController::class, 'verifyOnline']);
 });

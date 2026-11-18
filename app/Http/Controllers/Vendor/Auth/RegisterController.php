@@ -108,14 +108,19 @@ class RegisterController extends BaseController
 
             $this->sellerWalletService->createForSeller(sellerId: $vendor->id);
 
-            // KYC: create/update profile, upload documents, and submit for review (uses KYC module/service)
+            // KYC: create/update profile, upload documents, attempt online verification (primary) with manual fallback, and submit
             $profile = $this->vendorKycService->getOrCreateForSeller($vendor);
-            $profile = $this->vendorKycService->updateProfile($profile, $request->only([
-                'business_type','legal_name','trade_name','registration_type','gst_number',
-                'pan_number','pan_holder_name',
-                'business_address_line1','business_address_line2','business_city','business_state','business_pincode','business_country',
-                'bank_account_name','bank_name','bank_branch','bank_account_no','bank_ifsc',
-            ]));
+            $mode = $request->input('kyc_verification_mode', 'online');
+            $profile = $this->vendorKycService->updateProfile($profile, array_merge(
+                $request->only([
+                    'business_type','legal_name','trade_name','registration_type','gst_number',
+                    'pan_number','pan_holder_name','pan_dob',
+                    'business_address_line1','business_address_line2','business_city','business_state','business_pincode','business_country',
+                    'bank_account_name','bank_name','bank_branch','bank_account_no','bank_ifsc',
+                ]),
+                ['verification_mode' => in_array($mode, ['online','manual'], true) ? $mode : 'online']
+            ));
+
             $docs = [
                 'pan_card' => $request->file('kyc_pan_card'),
                 'gst_certificate' => $request->file('kyc_gst_certificate'),
@@ -128,8 +133,33 @@ class RegisterController extends BaseController
                     $this->vendorKycService->uploadDocument($profile, $type, $file);
                 }
             }
-            $profile->refresh()->load('documents');
-            $this->vendorKycService->submit($profile, 'vendor', $vendor->id, false);
+
+            $sandbox = app(\App\Services\New\Sandbox\SandboxKycVerificationService::class);
+            if ($mode === 'online' && $sandbox->isEnabled()) {
+                $types = ['pan'];
+                if (($profile->registration_type ?? '') === 'gst') $types[] = 'gstin';
+                $types[] = 'bank';
+                $this->vendorKycService->verifyOnline($profile->fresh(), $types, [
+                    'pan_dob' => $request->input('pan_dob'),
+                    'consent' => $request->input('online_consent', 'Y'),
+                    'reason' => 'Vendor registration KYC verification',
+                ]);
+            } elseif ($mode === 'online' && !$sandbox->isEnabled() && !$sandbox->manualFallbackEnabled()) {
+                throw \Illuminate\Validation\ValidationException::withMessages(['kyc' => [translate('Online KYC verification is currently unavailable')]]);
+            }
+
+            $profile = $profile->fresh()->load('documents');
+            $missing = $this->vendorKycService->missingRequirements($profile);
+            if (!empty($missing)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'kyc_documents' => [translate('KYC incomplete. Verify online or upload required manual documents').': '.implode(', ', $missing)],
+                ]);
+            }
+
+            $submit = $this->vendorKycService->submit($profile, 'vendor', $vendor->id, false);
+            if (!($submit['ok'] ?? false)) {
+                throw \Illuminate\Validation\ValidationException::withMessages(['kyc_submit' => [$submit['message'] ?? translate('Unable to submit KYC'), 'missing' => $submit['missing'] ?? []]]);
+            }
 
             return $vendor;
         });

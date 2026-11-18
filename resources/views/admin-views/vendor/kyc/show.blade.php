@@ -18,13 +18,16 @@
                         <div class="col-md-6"><strong>{{ translate('Vendor') }}:</strong> {{ $profile->seller ? ($profile->seller->f_name.' '.$profile->seller->l_name) : '-' }} ({{ $profile->seller->email ?? '' }})</div>
                         <div class="col-md-6"><strong>{{ translate('Shop') }}:</strong> {{ $profile->shop->name ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('Business Type') }}:</strong> {{ $profile->business_type ?? '-' }}</div>
+                        <div class="col-md-6"><strong>{{ translate('Verification Mode') }}:</strong> {{ $profile->verification_mode ?? 'manual' }}</div>
                         <div class="col-md-6"><strong>{{ translate('Registration Type') }}:</strong> {{ $profile->registration_type ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('Legal Name') }}:</strong> {{ $profile->legal_name ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('Trade Name') }}:</strong> {{ $profile->trade_name ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('GST Number') }}:</strong> {{ $profile->gst_number ?? '-' }}</div>
+                        <div class="col-md-6"><strong>{{ translate('GST Verification') }}:</strong> {{ $profile->gst_verification_status ?? '-' }} @if($profile->gst_verification_ref)<small class="text-muted">(ref: {{ $profile->gst_verification_ref }})</small>@endif</div>
                         <div class="col-md-6"><strong>{{ translate('PAN Number') }}:</strong> {{ $profile->pan_number ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('PAN Holder') }}:</strong> {{ $profile->pan_holder_name ?? '-' }}</div>
-                        <div class="col-md-6"><strong>{{ translate('PAN Verification') }}:</strong> {{ $profile->pan_verification_status ?? '-' }}</div>
+                        <div class="col-md-6"><strong>{{ translate('PAN DOB') }}:</strong> {{ $profile->pan_dob ?? '-' }}</div>
+                        <div class="col-md-6"><strong>{{ translate('PAN Verification') }}:</strong> {{ $profile->pan_verification_status ?? '-' }} @if($profile->pan_verification_ref)<small class="text-muted">(ref: {{ $profile->pan_verification_ref }})</small>@endif</div>
                         <div class="col-12"><hr></div>
                         <div class="col-12"><strong>{{ translate('Business Address') }}:</strong>
                             <div>{{ $profile->business_address_line1 }} {{ $profile->business_address_line2 }}</div>
@@ -36,7 +39,7 @@
                         <div class="col-md-6"><strong>{{ translate('Branch') }}:</strong> {{ $profile->bank_branch ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('Account No') }}:</strong> {{ $profile->bank_account_no ?? '-' }}</div>
                         <div class="col-md-6"><strong>{{ translate('IFSC') }}:</strong> {{ $profile->bank_ifsc ?? '-' }}</div>
-                        <div class="col-md-6"><strong>{{ translate('Bank Verification') }}:</strong> {{ $profile->bank_verification_status ?? '-' }}</div>
+                        <div class="col-md-6"><strong>{{ translate('Bank Verification') }}:</strong> {{ $profile->bank_verification_status ?? '-' }} @if($profile->bank_verification_ref)<small class="text-muted">(ref: {{ $profile->bank_verification_ref }})</small>@endif</div>
                     </div>
                 </div>
             </div>
@@ -45,12 +48,21 @@
                 <div class="card-header"><h5 class="mb-0">{{ translate('Uploaded Documents') }}</h5></div>
                 <div class="card-body table-responsive">
                     <table class="table table-bordered">
-                        <thead><tr><th>{{ translate('Type') }}</th><th>{{ translate('Status') }}</th><th>{{ translate('File') }}</th><th>{{ translate('Note') }}</th></tr></thead>
+                        <thead><tr><th>{{ translate('Type') }}</th><th>{{ translate('Status') }}</th><th>{{ translate('Method') }}</th><th>{{ translate('File') }}</th><th>{{ translate('Note') }}</th></tr></thead>
                         <tbody>
                         @forelse($profile->documents as $doc)
                             <tr>
                                 <td>{{ $doc->document_type }}</td>
-                                <td>{{ $doc->status }}</td>
+                                <td>
+                                    {{ $doc->status }}
+                                    @if($doc->verification_reference)
+                                        <div><small class="text-muted">{{ translate('Ref') }}: {{ $doc->verification_reference }}</small></div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge badge-soft-{{ ($doc->verification_method ?? 'manual') === 'online' ? 'success' : 'secondary' }}">{{ $doc->verification_method ?? 'manual' }}</span>
+                                    @if($doc->verification_provider)<div><small class="text-muted">{{ $doc->verification_provider }}</small></div>@endif
+                                </td>
                                 <td>
                                     @if($doc->file_full_url)
                                         <a href="{{ is_array($doc->file_full_url)?($doc->file_full_url['path']??'#'):$doc->file_full_url }}" target="_blank">{{ $doc->original_name ?? translate('View') }}</a>

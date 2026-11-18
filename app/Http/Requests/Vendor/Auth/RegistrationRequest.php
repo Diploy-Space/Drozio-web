@@ -46,6 +46,9 @@ class RegistrationRequest extends BaseRequest
             'gst_number' => [$isGst ? 'required' : 'nullable', 'string', 'max:50'],
             'pan_number' => 'required|string|max:20',
             'pan_holder_name' => 'required|string|max:255',
+            'pan_dob' => 'nullable|string|max:20',
+            'kyc_verification_mode' => 'nullable|in:online,manual',
+            'online_consent' => 'nullable',
             'business_address_line1' => 'required|string|max:255',
             'business_address_line2' => 'nullable|string|max:255',
             'business_city' => 'required|string|max:100',
@@ -58,11 +61,11 @@ class RegistrationRequest extends BaseRequest
             'bank_account_no' => 'required|string|max:50',
             'bank_ifsc' => 'required|string|max:30',
 
-            // KYC documents
-            'kyc_pan_card' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
-            'kyc_gst_certificate' => [$isGst ? 'required' : 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf,doc,docx', 'max:5120'],
+            // KYC documents (verifiable docs may be satisfied online; address/business always manual)
+            'kyc_pan_card' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'kyc_gst_certificate' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
             'kyc_address_proof' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
-            'kyc_bank_proof' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'kyc_bank_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
             'kyc_business_registration' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
         ];
     }

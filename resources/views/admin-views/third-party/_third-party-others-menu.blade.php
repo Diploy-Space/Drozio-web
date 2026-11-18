@@ -48,6 +48,13 @@
                 {{ translate('Integration') }}
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ Request::is('admin/settings/third-party/sandbox-kyc*') ?'active':'' }}"
+               href="{{ route('admin.settings.third-party.sandbox-kyc') }}">
+                {{ translate('Sandbox KYC API') }}
+            </a>
+        </li>
     </ul>
     <div class="nav--tab__prev">
         <button type="button" class="btn btn-circle border-0 bg-white text-primary">
