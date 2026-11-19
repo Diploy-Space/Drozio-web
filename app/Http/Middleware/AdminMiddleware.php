@@ -23,8 +23,14 @@ class AdminMiddleware
                 return redirect('login/' . getWebConfig(name: 'employee_login_url'));
             }
             return $next($request);
-        } else {
-            abort(404);
         }
+
+        if ($request->expectsJson()) {
+            abort(401, 'Unauthenticated.');
+        }
+
+        $adminLoginUrl = getWebConfig(name: 'admin_login_url');
+
+        return redirect()->guest($adminLoginUrl ? url('login/' . $adminLoginUrl) : url('/'));
     }
 }
