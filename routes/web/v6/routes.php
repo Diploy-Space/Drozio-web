@@ -41,6 +41,7 @@ use App\Http\Controllers\Web\v6\ProductQuickViewController;
 use App\Http\Controllers\Web\v6\ProductSearchController;
 use App\Http\Controllers\Web\v6\ProductViewStyleController;
 use App\Http\Controllers\Web\v6\ProfileController;
+use App\Http\Controllers\Web\v6\QuickDeliveryController;
 use App\Http\Controllers\Web\v6\ReferEarnController;
 use App\Http\Controllers\Web\v6\RefundController;
 use App\Http\Controllers\Web\v6\RestockRequestController;
@@ -384,6 +385,15 @@ Route::controller(PaymentResultController::class)->group(function () {
     Route::get('payment-success', 'success')->name('payment-success');
     Route::get('payment-fail', 'fail')->name('payment-fail');
 });
+
+// quick delivery routes
+
+Route::prefix('quick-delivery')->name('quick-delivery.')->controller(QuickDeliveryController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('address', 'selectAddress')->middleware('throttle:20,1')->name('select-address');
+    Route::post('change-address', 'changeAddress')->name('change-address');
+});
+
 
 Route::permanentRedirect('user-profile', 'customer/profile');
 Route::permanentRedirect('user-account', 'customer/profile/edit');

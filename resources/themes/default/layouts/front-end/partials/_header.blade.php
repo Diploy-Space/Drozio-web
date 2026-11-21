@@ -2,6 +2,7 @@
 @php($categories = $headerCategories)
 @php($isSignedIn = auth('customer')->check())
 @php($showsProfileMenu = $isSignedIn && View::hasSection('account-profile-menu'))
+@php($quickDeliveryUrl = url('/quick-delivery'))
 @php($accountLinks = [
     ['label' => translate('My Profile'), 'url' => route('user-account'), 'icon' => 'fi fi-rr-circle-user'],
     ['label' => translate('Orders'), 'url' => route('account-oder'), 'icon' => 'fi fi-rr-box-open'],
@@ -123,6 +124,10 @@
                 <ul class="sh-menu">
                     <li class="{{ request()->is('/') ? 'is-active' : '' }}">
                         <a class="sh-menu__link" href="{{ route('home') }}">{{ translate('Home') }}</a>
+                    </li>
+
+                    <li class="{{ request()->is('quick-delivery*') ? 'is-active' : '' }}">
+                        <a class="sh-menu__link" href="{{ $quickDeliveryUrl }}">{{ translate('Quick Delivery') }}</a>
                     </li>
 
                     @if(getWebConfig(name: 'product_brand'))
@@ -269,53 +274,53 @@
         </div>
 
         @if(count($categories) > 0)
-        <div class="megamenu-wrap">
-            <div class="container">
-                <div class="category-menu-wrap">
-                    <ul class="category-menu">
-                        @foreach ($categories as $category)
-                            <li>
-                                <a href="{{ route('category-products', ['slug' => $category['slug']]) }}">
+            <div class="megamenu-wrap">
+                <div class="container">
+                    <div class="category-menu-wrap">
+                        <ul class="category-menu">
+                            @foreach ($categories as $category)
+                                <li>
+                                    <a href="{{ route('category-products', ['slug' => $category['slug']]) }}">
                                     <span class="d-flex gap-10px justify-content-start align-items-center">
                                         <img loading="lazy" decoding="async" class="aspect-1 rounded-circle" width="20"
                                              src="{{ getStorageImages(path: $category?->icon_full_url, type: 'category') }}"
                                              alt="{{ $category['name'] }}">
                                         <span class="line--limit-2">{{ $category->name }}</span>
                                     </span>
-                                </a>
-                                @if ($category->childes->count() > 0)
-                                    <div class="mega_menu z-2">
-                                        @foreach ($category->childes as $subCategory)
-                                            <div class="mega_menu_inner">
-                                                <h6>
-                                                    <a href="{{ route('category-products', ['slug' => $subCategory['slug']]) }}">
-                                                        {{ $subCategory->name }}
-                                                    </a>
-                                                </h6>
-                                                @foreach ($subCategory->childes as $subSubCategory)
-                                                    <div>
-                                                        <a href="{{ route('category-products', ['slug' => $subSubCategory['slug']]) }}">
-                                                            {{ $subSubCategory->name }}
+                                    </a>
+                                    @if ($category->childes->count() > 0)
+                                        <div class="mega_menu z-2">
+                                            @foreach ($category->childes as $subCategory)
+                                                <div class="mega_menu_inner">
+                                                    <h6>
+                                                        <a href="{{ route('category-products', ['slug' => $subCategory['slug']]) }}">
+                                                            {{ $subCategory->name }}
                                                         </a>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
+                                                    </h6>
+                                                    @foreach ($subCategory->childes as $subSubCategory)
+                                                        <div>
+                                                            <a href="{{ route('category-products', ['slug' => $subSubCategory['slug']]) }}">
+                                                                {{ $subSubCategory->name }}
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </li>
+                            @endforeach
+                            <li class="text-center">
+                                <a href="{{ route('categories') }}"
+                                   class="text-primary font-weight-bold justify-content-center text-capitalize view-all-btn-text">
+                                    <span class="view-btn-text">{{ translate('View All') }}</span>
+                                    <i class="czi-view-list"></i>
+                                </a>
                             </li>
-                        @endforeach
-                        <li class="text-center">
-                            <a href="{{ route('categories') }}"
-                               class="text-primary font-weight-bold justify-content-center text-capitalize view-all-btn-text">
-                                <span class="view-btn-text">{{ translate('View All') }}</span>
-                                <i class="czi-view-list"></i>
-                            </a>
-                        </li>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
     </div>
 </header>
@@ -332,59 +337,63 @@
     <div class="sh-drawer__body">
         <ul class="sh-tree">
             <li class="sh-tree__section">
+                <a class="sh-tree__head {{ request()->is('quick-delivery*') ? 'web-text-primary' : '' }}"
+                   href="{{ $quickDeliveryUrl }}">{{ translate('Quick Delivery') }}</a>
+            </li>
+            <li class="sh-tree__section">
                 @if(count($categories) > 0)
-                <button class="sh-tree__head" type="button" data-sh-tree="#storefrontMenuCategories" aria-expanded="true">
-                    {{ translate('Categories') }}
-                    <i class="fi fi-rr-angle-down"></i>
-                </button>
-                <div class="sh-tree__panel is-open" id="storefrontMenuCategories">
-                    @foreach ($categories as $categoryIndex => $category)
-                        <div class="sh-tree__row">
-                            <a class="sh-tree__item" href="{{ route('category-products', ['slug' => $category['slug']]) }}">
-                                <img loading="lazy" src="{{ getStorageImages(path: $category?->icon_full_url, type: 'category') }}"
-                                     alt="{{ $category['name'] }}">
-                                <span>{{ $category['name'] }}</span>
-                            </a>
-                            @if ($category->childes->count() > 0)
-                                <button class="sh-tree__toggle" type="button"
-                                        data-sh-tree="#storefrontMenuCategory{{ $categoryIndex }}" aria-expanded="false"
-                                        aria-label="{{ $category['name'] }}">
-                                    <i class="fi fi-rr-angle-small-right"></i>
-                                </button>
-                            @endif
-                        </div>
-                        @if ($category->childes->count() > 0)
-                            <div class="sh-tree__panel" id="storefrontMenuCategory{{ $categoryIndex }}">
-                                @foreach ($category->childes as $subCategoryIndex => $subCategory)
-                                    <div class="sh-tree__row">
-                                        <a class="sh-tree__item" href="{{ route('category-products', ['slug' => $subCategory['slug']]) }}">
-                                            <span>{{ $subCategory['name'] }}</span>
-                                        </a>
-                                        @if ($subCategory->childes->count() > 0)
-                                            <button class="sh-tree__toggle" type="button"
-                                                    data-sh-tree="#storefrontMenuCategory{{ $categoryIndex }}Sub{{ $subCategoryIndex }}"
-                                                    aria-expanded="false" aria-label="{{ $subCategory['name'] }}">
-                                                <i class="fi fi-rr-angle-small-right"></i>
-                                            </button>
-                                        @endif
-                                    </div>
-                                    @if ($subCategory->childes->count() > 0)
-                                        <div class="sh-tree__panel" id="storefrontMenuCategory{{ $categoryIndex }}Sub{{ $subCategoryIndex }}">
-                                            @foreach ($subCategory->childes as $subSubCategory)
-                                                <a class="sh-tree__item" href="{{ route('category-products', ['slug' => $subSubCategory['slug']]) }}">
-                                                    <span>{{ $subSubCategory['name'] }}</span>
-                                                </a>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                @endforeach
+                    <button class="sh-tree__head" type="button" data-sh-tree="#storefrontMenuCategories" aria-expanded="true">
+                        {{ translate('Categories') }}
+                        <i class="fi fi-rr-angle-down"></i>
+                    </button>
+                    <div class="sh-tree__panel is-open" id="storefrontMenuCategories">
+                        @foreach ($categories as $categoryIndex => $category)
+                            <div class="sh-tree__row">
+                                <a class="sh-tree__item" href="{{ route('category-products', ['slug' => $category['slug']]) }}">
+                                    <img loading="lazy" src="{{ getStorageImages(path: $category?->icon_full_url, type: 'category') }}"
+                                         alt="{{ $category['name'] }}">
+                                    <span>{{ $category['name'] }}</span>
+                                </a>
+                                @if ($category->childes->count() > 0)
+                                    <button class="sh-tree__toggle" type="button"
+                                            data-sh-tree="#storefrontMenuCategory{{ $categoryIndex }}" aria-expanded="false"
+                                            aria-label="{{ $category['name'] }}">
+                                        <i class="fi fi-rr-angle-small-right"></i>
+                                    </button>
+                                @endif
                             </div>
-                        @endif
-                    @endforeach
-                    <a class="sh-tree__item web-text-primary" href="{{ route('categories') }}">
-                        <span>{{ translate('View All') }}</span>
-                    </a>
-                </div>
+                            @if ($category->childes->count() > 0)
+                                <div class="sh-tree__panel" id="storefrontMenuCategory{{ $categoryIndex }}">
+                                    @foreach ($category->childes as $subCategoryIndex => $subCategory)
+                                        <div class="sh-tree__row">
+                                            <a class="sh-tree__item" href="{{ route('category-products', ['slug' => $subCategory['slug']]) }}">
+                                                <span>{{ $subCategory['name'] }}</span>
+                                            </a>
+                                            @if ($subCategory->childes->count() > 0)
+                                                <button class="sh-tree__toggle" type="button"
+                                                        data-sh-tree="#storefrontMenuCategory{{ $categoryIndex }}Sub{{ $subCategoryIndex }}"
+                                                        aria-expanded="false" aria-label="{{ $subCategory['name'] }}">
+                                                    <i class="fi fi-rr-angle-small-right"></i>
+                                                </button>
+                                            @endif
+                                        </div>
+                                        @if ($subCategory->childes->count() > 0)
+                                            <div class="sh-tree__panel" id="storefrontMenuCategory{{ $categoryIndex }}Sub{{ $subCategoryIndex }}">
+                                                @foreach ($subCategory->childes as $subSubCategory)
+                                                    <a class="sh-tree__item" href="{{ route('category-products', ['slug' => $subSubCategory['slug']]) }}">
+                                                        <span>{{ $subSubCategory['name'] }}</span>
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endforeach
+                        <a class="sh-tree__item web-text-primary" href="{{ route('categories') }}">
+                            <span>{{ translate('View All') }}</span>
+                        </a>
+                    </div>
                 @else
                     <a class="sh-tree__head" href="{{ route('categories') }}">{{ translate('Categories') }}</a>
                 @endif
